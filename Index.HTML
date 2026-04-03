@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Escolas Rurais do Brasil</title>
+  <link rel="stylesheet" href="./style.css" />
+  <link rel="icon" href="favicon.png" type="image/png">
+  <script src="./script.js" defer></script>
+</head>
+<body>
+  <div class="container">
+    <section class="hero">
+      <div class="card hero-panel">
+        <!-- <div class="eyebrow">Educação no campo</div> -->
+        <div class="hero-body">
+          <div class="hero-copy">
+            <img src ="logo-horizontal-agora-vai.png" class="logo">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card filters-bar">
+      <div class="filters-inline">
+        <div class="search-cluster">
+          <span class="filters-kicker">Filtros</span>
+
+          <div class="field search-field">
+            <label for="searchInput">Buscar por nome</label>
+            <input id="searchInput" type="text" placeholder="Nome da escola, código, município..." />
+          </div>
+        </div>
+
+        <div class="field page-size-field">
+          <label for="pageSizeFilter">Por página</label>
+          <select id="pageSizeFilter">
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="ufFilter">UF</label>
+          <select id="ufFilter"><option value="">Todas</option></select>
+        </div>
+
+        <div class="field">
+          <label for="cityFilter">Município</label>
+          <select id="cityFilter"><option value="">Todos</option></select>
+        </div>
+
+        <div class="field">
+          <label for="differentiatedFilter">Área</label>
+          <select id="differentiatedFilter"><option value="">Todas</option></select>
+        </div>
+
+        <div class="field">
+          <label for="dependencyFilter">Categoria</label>
+          <select id="dependencyFilter"><option value="">Todas</option></select>
+        </div>
+
+        <div class="field">
+          <label for="councilFilter">Status</label>
+          <select id="councilFilter"><option value="">Todas</option></select>
+        </div>
+
+        <div class="field school-size-field">
+          <label for="schoolSizeFilter">Porte</label>
+          <select id="schoolSizeFilter"><option value="">Todos</option></select>
+        </div>
+
+        <div class="field stages-field">
+          <label for="stageFilter">Modalidade</label>
+          <select id="stageFilter"><option value="">Todas</option></select>
+        </div>
+
+        <div class="filter-actions">
+          <button class="secondary" id="clearBtn" type="button">Limpar filtros</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="stats">
+      <div class="card stat"><div class="kicker">Escolas filtradas</div><div class="value" id="statCount">0</div></div>
+      <div class="card stat"><div class="kicker">Região filtrada</div><div class="value" id="statRegiao">Todas</div></div>
+      <div class="card stat"><div class="kicker">Estados</div><div class="value" id="statUFs">0</div></div>
+      <div class="card stat"><div class="kicker">Municípios</div><div class="value" id="statCities">0</div></div>
+      <div class="card stat"><div class="kicker">Escolas Fechadas</div><div class="value" id="escolaPorRegiao">1.585</div></div>
+    </section>
+
+    <section class="content">
+      <div class="card results-card">
+        <div class="toolbar">
+          <div class="toolbar-copy">
+            <h2>Resultados</h2>
+            <p id="resultSummary">Carregando base local...</p>
+          </div>
+
+          <div class="toolbar-actions">
+            <div id="paginationWrap" class="pagination"></div>
+          </div>
+        </div>
+
+        <div id="tableWrap" class="empty">Carregando base local...</div>
+      </div>
+    </section>
+  </div>
+</body>
+</html>
