@@ -62,7 +62,7 @@ const TABLE_COLUMNS = [
     key: "school",
     header: "Escola",
     exportHeader: "Escola",
-    render: row => `<strong class="school-name" title="${escapeHtml(text(get(row, "school")) || "Sem nome")}">${renderValue(get(row, "school"), "Sem nome")}</strong>`
+    render: row => renderSchoolTableCell(row)
   },
   { key: "inep", header: "Código INEP", exportHeader: "Código INEP" },
   { key: "uf", header: "UF", exportHeader: "UF" },
@@ -73,13 +73,6 @@ const TABLE_COLUMNS = [
     headerHtml: "Área",
     exportHeader: "Localidade Diferenciada"
   },
-  {
-    key: "address",
-    header: "Endereço",
-    exportHeader: "Endereço",
-    render: row => renderAddressLink(row)
-  },
-  { key: "phone", header: "Telefone", exportHeader: "Telefone" },
   {
     key: "dependency",
     header: "Dependência Administrativa",
@@ -295,6 +288,29 @@ function renderAddressLink(row) {
   }
 
   return `<span class="address-text" title="${escapeHtml(address)}">${escapeHtml(address)}</span>`;
+}
+
+function renderPhoneCell(row) {
+  const phone = text(get(row, "phone"));
+
+  if (!phone) {
+    return EMPTY_CELL;
+  }
+
+  return `<span class="phone-text" title="${escapeHtml(phone)}">${escapeHtml(phone)}</span>`;
+}
+
+function renderSchoolTableCell(row) {
+  const schoolName = text(get(row, "school")) || "Sem nome";
+  const schoolLocation = buildSchoolLocationLabel(row) || "Localização não informada";
+
+  return `
+    <div class="school-cell">
+      <strong class="school-name" title="${escapeHtml(schoolName)}">${escapeHtml(schoolName)}</strong>
+      <span class="school-cell__meta">${escapeHtml(schoolLocation)}</span>
+      <span class="school-cell__hint">Toque para abrir a ficha completa</span>
+    </div>
+  `;
 }
 
 function setTableMessage(message) {
@@ -2142,7 +2158,11 @@ function buildSchoolLocationLabel(row) {
 }
 
 function renderProfileField(label, value, options = {}) {
-  const modifier = options.fullWidth ? " school-sheet__item--full" : "";
+  const modifiers = [
+    options.fullWidth ? "school-sheet__item--full" : "",
+    text(options.className)
+  ].filter(Boolean).join(" ");
+  const modifier = modifiers ? ` ${modifiers}` : "";
 
   return `
     <div class="school-sheet__item${modifier}">
@@ -2207,18 +2227,48 @@ function buildSchoolIncomeSnapshot(row) {
   const municipalityValue = municipalityEntry
     ? app.income.municipalityValuesByUf.get(ufSigla)?.get(municipalityEntry.id) ?? null
     : null;
+  const brazilValue = app.income.brazilValue ?? null;
+  const comparisonPercent =
+    isFiniteNumber(municipalityValue) && isFiniteNumber(brazilValue) && brazilValue > 0
+      ? ((municipalityValue - brazilValue) / brazilValue) * 100
+      : null;
 
   return {
     sourceLabel: INCOME_SOURCE_LABEL,
     cityName,
     ufSigla,
     municipalityValue,
+    brazilValue,
+    comparisonPercent,
     municipalityFound: Boolean(municipalityEntry)
   };
 }
 
+function formatSignedPercent(value) {
+  if (!isFiniteNumber(value)) {
+    return "Não disponível";
+  }
+
+  const prefix = value > 0 ? "+" : value < 0 ? "-" : "";
+  const absoluteValue = Math.abs(value);
+
+  return `${prefix}${absoluteValue.toLocaleString("pt-BR", {
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1
+  })}%`;
+}
+
 function renderSchoolIncomeMetrics(row, snapshot) {
   const cityLabel = [snapshot.cityName, snapshot.ufSigla].map(text).filter(Boolean).join(" • ");
+  const comparisonDirection = isFiniteNumber(snapshot.comparisonPercent)
+    ? (
+      snapshot.comparisonPercent > 0
+        ? "acima"
+        : snapshot.comparisonPercent < 0
+          ? "abaixo"
+          : "no mesmo nível"
+    )
+    : "";
 
   return `
     ${renderLiteracyMetrics([
@@ -2232,8 +2282,19 @@ function renderSchoolIncomeMetrics(row, snapshot) {
               : `${cityLabel} • sem correspondência automática no IBGE`
           )
           : "Município da escola não informado na base local."
+      },
+      {
+        label: "Município x Brasil",
+        value: formatSignedPercent(snapshot.comparisonPercent),
+        caption: isFiniteNumber(snapshot.comparisonPercent)
+          ? (
+            comparisonDirection === "no mesmo nível"
+              ? `${cityLabel || "Município da escola"} está no mesmo nível da renda per capita do Brasil (${formatCurrency(snapshot.brazilValue)}).`
+              : `${cityLabel || "Município da escola"} está ${comparisonDirection} da renda per capita do Brasil (${formatCurrency(snapshot.brazilValue)}).`
+          )
+          : "Comparativo indisponível para esta escola."
       }
-    ], { compact: true, single: true })}
+    ], { compact: true })}
     <p class="school-sheet__literacy-source">Fonte: ${escapeHtml(snapshot.sourceLabel)}</p>
   `;
 }
@@ -2259,21 +2320,21 @@ function renderSchoolSheet(row) {
   const mapCaption = text(get(row, "address")) || "Endereço não informado.";
 
   const identificationFields = [
-    renderProfileField("Código INEP", get(row, "inep")),
-    renderProfileField("Região", getRegionByUf(get(row, "uf"))),
-    renderProfileField("Município", get(row, "city")),
-    renderProfileField("UF", get(row, "uf")),
-    renderProfileField("Dependência administrativa", get(row, "dependency")),
-    renderProfileField("Situação no conselho", get(row, "councilRegulation")),
-    renderProfileField("Telefone", get(row, "phone")),
-    renderProfileField("Coordenadas", buildCoordinateSummary(row), { fullWidth: true }),
+    renderProfileField("Código INEP", get(row, "inep"), { className: "school-sheet__item--metric" }),
+    renderProfileField("Região", getRegionByUf(get(row, "uf")), { className: "school-sheet__item--metric" }),
+    renderProfileField("Município", get(row, "city"), { className: "school-sheet__item--metric" }),
+    renderProfileField("UF", get(row, "uf"), { className: "school-sheet__item--metric" }),
+    renderProfileField("Dependência administrativa", get(row, "dependency"), { className: "school-sheet__item--span-2" }),
+    renderProfileField("Situação no conselho", get(row, "councilRegulation"), { className: "school-sheet__item--span-2" }),
+    renderProfileField("Telefone", get(row, "phone"), { className: "school-sheet__item--span-2" }),
+    renderProfileField("Coordenadas", buildCoordinateSummary(row), { className: "school-sheet__item--span-2" }),
     renderProfileField("Endereço", get(row, "address"), { fullWidth: true })
   ].join("");
 
   const educationFields = [
     renderProfileField("Restrição de atendimento", get(row, "restriction")),
     renderProfileField("Área", get(row, "differentiatedLocation")),
-    renderProfileField("Porte", get(row, "schoolSize")),
+    renderProfileField("Porte", get(row, "schoolSize"), { fullWidth: true }),
     renderProfileField("Etapas e modalidades", get(row, "stages"), { fullWidth: true }),
     renderProfileField("Outras modalidades", get(row, "otherModalities"), { fullWidth: true })
   ].join("");
@@ -2327,7 +2388,7 @@ function renderSchoolSheet(row) {
               <h4>Identificação</h4>
               <p>Dados principais para contato e localização da unidade.</p>
             </div>
-            <dl class="school-sheet__grid">${identificationFields}</dl>
+            <dl class="school-sheet__grid school-sheet__grid--identification">${identificationFields}</dl>
             ${renderSectionSource(LOCAL_PROJECT_SOURCE_LABEL)}
           </section>
 
@@ -2336,7 +2397,7 @@ function renderSchoolSheet(row) {
               <h4>Oferta educacional</h4>
               <p>Panorama da modalidade, porte e condições de atendimento.</p>
             </div>
-            <dl class="school-sheet__grid">${educationFields}</dl>
+            <dl class="school-sheet__grid school-sheet__grid--education">${educationFields}</dl>
             ${renderSectionSource(LOCAL_PROJECT_SOURCE_LABEL)}
           </section>
 
