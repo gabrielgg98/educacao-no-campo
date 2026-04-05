@@ -11,14 +11,14 @@
 <body>
   <div class="container">
     <section class="hero">
-      <div class="card hero-panel">
+      
         <!-- <div class="eyebrow">Educação no campo</div> -->
         <div class="hero-body">
           <div class="hero-copy">
             <img src ="logo-horizontal-agora-vai.png" class="logo">
           </div>
         </div>
-      </div>
+
     </section>
 
     <section class="card filters-bar">
@@ -42,6 +42,11 @@
         </div>
 
         <div class="field">
+          <label for="regionFilter">Região</label>
+          <select id="regionFilter"><option value="">Todas</option></select>
+        </div>
+
+        <div class="field">
           <label for="ufFilter">UF</label>
           <select id="ufFilter"><option value="">Todas</option></select>
         </div>
@@ -49,6 +54,7 @@
         <div class="field">
           <label for="cityFilter">Município</label>
           <select id="cityFilter"><option value="">Todos</option></select>
+          <p class="field-hint" id="cityFilterHint" aria-live="polite"></p>
         </div>
 
         <div class="field">
@@ -88,6 +94,23 @@
       <div class="card stat"><div class="kicker">Estados</div><div class="value" id="statUFs">0</div></div>
       <div class="card stat"><div class="kicker">Municípios</div><div class="value" id="statCities">0</div></div>
       <div class="card stat"><div class="kicker">Escolas Fechadas</div><div class="value" id="escolaPorRegiao">1.585</div></div>
+      <div class="card stat stat--income">
+        <div class="kicker">Renda per capita</div>
+        <div class="value" id="incomeStatValue">Carregando...</div>
+        <div class="meta" id="incomeStatScope">Consultando o IBGE...</div>
+      </div>
+    </section>
+
+    <section class="card literacy-panel">
+      <div class="literacy-panel__header">
+        <div>
+          <span class="literacy-panel__eyebrow">Contexto educacional</span>
+          <h2>Painel de alfabetização</h2>
+        </div>
+        <p id="literacyPanelStatus">Carregando indicadores do IBGE...</p>
+      </div>
+
+      <div class="literacy-panel__grid" id="literacyPanelContent"></div>
     </section>
 
     <section class="content">
@@ -105,6 +128,61 @@
 
         <div id="tableWrap" class="empty">Carregando base local...</div>
       </div>
+    </section>
+
+    <section class="card education-dashboard">
+      <div class="education-dashboard__header">
+        <div>
+          <span class="literacy-panel__eyebrow">Desigualdade educacional</span>
+          <h2>Escolaridade por território</h2>
+          <p class="education-dashboard__population-note" id="educationDashboardPopulationNote">Base considerada: carregando...</p>
+        </div>
+        <p class="education-dashboard__status" id="educationDashboardStatus">Carregando indicadores do IBGE...</p>
+      </div>
+
+      <div class="education-dashboard__summary" id="educationDashboardSummary"></div>
+
+      <div class="education-dashboard__chart-wrap">
+        <div class="education-dashboard__chart-head">
+          <div>
+            <h3 id="educationDashboardChartTitle">Carregando comparativo...</h3>
+            <p id="educationDashboardChartNote">Os percentuais comparam pessoas de 25 anos ou mais.</p>
+          </div>
+        </div>
+
+        <div class="education-dashboard__chart" id="educationDashboardChart"></div>
+      </div>
+
+      <div class="education-dashboard__meta">
+        <p class="education-dashboard__source" id="educationDashboardSource"></p>
+        <p class="education-dashboard__footnote">
+          Observação: os indicadores de conclusão são cumulativos. Por isso, ao somar "Pelo menos fundamental completo", "Pelo menos ensino médio completo" e "Superior completo", o total pode ultrapassar 100%.
+        </p>
+      </div>
+    </section>
+  </div>
+
+  <div class="school-modal" id="schoolModal" aria-hidden="true">
+    <div class="school-modal__backdrop" data-close-school-modal></div>
+
+    <section
+      class="school-modal__panel"
+      id="schoolModalPanel"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="schoolModalTitle"
+      tabindex="-1"
+    >
+      <button
+        class="school-modal__close"
+        type="button"
+        data-close-school-modal
+        aria-label="Fechar ficha da escola"
+      >
+        &times;
+      </button>
+
+      <div id="schoolModalContent"></div>
     </section>
   </div>
 </body>
