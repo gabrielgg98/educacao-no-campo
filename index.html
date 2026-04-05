@@ -160,6 +160,12 @@
         </p>
       </div>
     </section>
+
+    <section class="sources-link-section" aria-label="Fontes da base de dados">
+      <a class="sources-link" id="openSourcesModal" href="#fontes-da-base">
+        Verificar fontes da base de dados
+      </a>
+    </section>
   </div>
 
   <div class="school-modal" id="schoolModal" aria-hidden="true">
@@ -183,6 +189,29 @@
       </button>
 
       <div id="schoolModalContent"></div>
+    </section>
+  </div>
+  <div class="school-modal sources-modal" id="sourcesModal" aria-hidden="true">
+    <div class="school-modal__backdrop" data-close-sources-modal></div>
+
+    <section
+      class="school-modal__panel sources-modal__panel"
+      id="sourcesModalPanel"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="sourcesModalTitle"
+      tabindex="-1"
+    >
+      <button
+        class="school-modal__close"
+        type="button"
+        data-close-sources-modal
+        aria-label="Fechar painel de fontes da base de dados"
+      >
+        &times;
+      </button>
+
+      <div id="sourcesModalContent"></div>
     </section>
   </div>
 </body>

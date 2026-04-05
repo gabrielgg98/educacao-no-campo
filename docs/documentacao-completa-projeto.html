@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Documentação Completa - Projeto Educação no Campo</title>
+  <style>
+    :root {
+      --bg: #f4f7f5;
+      --paper: #ffffff;
+      --ink: #152033;
+      --muted: #52627d;
+      --accent: #215f48;
+      --accent-soft: #e6f2ec;
+      --line: #d8e0e5;
+      --code-bg: #0f1724;
+      --code-ink: #eaf2ff;
+      --shadow: 0 18px 40px rgba(13, 24, 38, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      line-height: 1.68;
+    }
+
+    .page {
+      width: min(1120px, calc(100% - 48px));
+      margin: 24px auto 40px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .hero {
+      padding: 56px 64px 40px;
+      background:
+        radial-gradient(circle at top right, rgba(33,95,72,0.16), transparent 28%),
+        linear-gradient(180deg, #f8fbf9, #f1f6f3);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 18px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0 0 18px;
+      font-size: 46px;
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: none;
+      font-size: 18px;
+      color: var(--muted);
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 26px;
+    }
+
+    .meta-card {
+      padding: 16px 18px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,0.82);
+    }
+
+    .meta-card strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .meta-card span {
+      display: block;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .content { padding: 40px 64px 60px; }
+
+    .summary-callout {
+      margin: 0 0 30px;
+      padding: 20px 22px;
+      border-left: 4px solid var(--accent);
+      border-radius: 16px;
+      background: #f4faf7;
+      color: #284036;
+    }
+
+    .summary-callout p { margin: 0; }
+
+    .toc {
+      margin: 0 0 36px;
+      padding: 24px 26px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: #fbfcfd;
+    }
+
+    .toc h2 { margin: 0 0 16px; font-size: 22px; }
+
+    .toc ol {
+      margin: 0;
+      padding-left: 20px;
+      columns: 2;
+      column-gap: 28px;
+    }
+
+    .toc li { margin-bottom: 10px; break-inside: avoid; }
+    .toc a { color: var(--ink); text-decoration: none; }
+    .toc a:hover { color: var(--accent); }
+
+    section.doc-section + section.doc-section {
+      margin-top: 36px;
+      padding-top: 36px;
+      border-top: 1px solid var(--line);
+    }
+
+    section.doc-section > h2 {
+      margin: 0 0 14px;
+      font-size: 30px;
+      line-height: 1.12;
+      letter-spacing: -0.03em;
+    }
+
+    h3 { margin: 26px 0 10px; font-size: 21px; letter-spacing: -0.02em; }
+    h4 { margin: 22px 0 8px; font-size: 17px; }
+    p, li { font-size: 15px; }
+    p { margin: 0 0 14px; }
+    ul, ol { margin: 0 0 16px; padding-left: 22px; }
+    li + li { margin-top: 8px; }
+
+    .grid-2, .grid-3 {
+      display: grid;
+      gap: 16px;
+      margin: 18px 0 20px;
+    }
+
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+    .card {
+      min-width: 0;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fbfcfd;
+    }
+
+    .card h3, .card h4 { margin-top: 0; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0 20px;
+      font-size: 14px;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #f5f8fa;
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    code {
+      padding: 2px 6px;
+      border-radius: 8px;
+      background: #eef3f6;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 0.95em;
+    }
+
+    pre {
+      margin: 16px 0 20px;
+      padding: 18px 20px;
+      border-radius: 18px;
+      background: var(--code-bg);
+      color: var(--code-ink);
+      overflow: auto;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    pre code {
+      padding: 0;
+      background: transparent;
+      color: inherit;
+    }
+
+    .note, .warning, .tip {
+      margin: 16px 0 18px;
+      padding: 16px 18px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+    }
+
+    .note { background: #f7fafc; }
+    .warning { background: #fff7ec; border-color: #f1d4a5; }
+    .tip { background: #eef8f3; border-color: #cce5d8; }
+
+    .label {
+      display: inline-block;
+      margin-bottom: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .flow {
+      margin: 16px 0 22px;
+      padding: 18px 20px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: #fbfcfd;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 13px;
+      white-space: pre-wrap;
+      line-height: 1.65;
+    }
+
+    .footer {
+      margin-top: 42px;
+      padding-top: 22px;
+      border-top: 1px solid var(--line);
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .page-break {
+      page-break-before: always;
+      break-before: page;
+    }
+
+    @page {
+      size: A4;
+      margin: 18mm;
+    }
+
+    @media print {
+      body { background: #ffffff; }
+      .page {
+        width: 100%;
+        margin: 0;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+      }
+      .hero { padding-top: 28px; }
+      a { color: inherit; text-decoration: none; }
+      section.doc-section, .card, .note, .warning, .tip, pre, table {
+        break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="hero">
+      <span class="eyebrow">Documentação técnica e didática</span>
+      <h1>Projeto Educação no Campo</h1>
+      <p>
+        Este documento foi escrito para uma pessoa iniciante. O objetivo é permitir que você leia com calma,
+        entenda a estrutura do projeto, saiba onde cada parte mora, compreenda por que certas decisões foram tomadas
+        e tenha segurança para fazer manutenção e novas implementações.
+      </p>
+
+      <div class="meta-grid">
+        <div class="meta-card">
+          <strong>Projeto</strong>
+          <span>Mapa interativo de escolas rurais com filtros, indicadores e ficha detalhada</span>
+        </div>
+        <div class="meta-card">
+          <strong>Tecnologias</strong>
+          <span>HTML, CSS, JavaScript puro, JSON local, APIs do IBGE e cache complementar</span>
+        </div>
+        <div class="meta-card">
+          <strong>Perfil do material</strong>
+          <span>Didático, detalhado e orientado para manutenção futura</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="content">
+      <div class="summary-callout">
+        <p>
+          Resumo em uma frase: este projeto carrega uma base local de escolas rurais, organiza filtros encadeados
+          por território, renderiza resultados e fichas detalhadas, e cruza essa base com dados externos do IBGE
+          e com um cache complementar por escola.
+        </p>
+      </div>
+
+      <nav class="toc" aria-label="Sumário">
+        <h2>Sumário</h2>
+        <ol>
+          <li><a href="#secao-1">Visão geral do projeto</a></li>
+          <li><a href="#secao-2">Como estudar este código sem se perder</a></li>
+          <li><a href="#secao-3">Mapa dos arquivos</a></li>
+          <li><a href="#secao-4">Fluxo geral da aplicação</a></li>
+          <li><a href="#secao-5">Anatomia do HTML</a></li>
+          <li><a href="#secao-6">Anatomia do CSS</a></li>
+          <li><a href="#secao-7">Arquitetura do JavaScript</a></li>
+          <li><a href="#secao-8">Modelo de dados local</a></li>
+          <li><a href="#secao-9">Sistema de filtros</a></li>
+          <li><a href="#secao-10">Busca, paginação e tabela</a></li>
+          <li><a href="#secao-11">Painéis e indicadores externos</a></li>
+          <li><a href="#secao-12">Ficha da escola e modais</a></li>
+          <li><a href="#secao-13">Cache complementar do Cultura Educa</a></li>
+          <li><a href="#secao-14">Receitas de manutenção</a></li>
+          <li><a href="#secao-15">Checklist de depuração</a></li>
+          <li><a href="#secao-16">Dívidas técnicas e pontos de atenção</a></li>
+          <li><a href="#secao-17">Glossário para iniciantes</a></li>
+          <li><a href="#secao-18">Como regenerar o PDF</a></li>
+        </ol>
+      </nav>
+
+      <section class="doc-section" id="secao-1">
+        <h2>1. Visão geral do projeto</h2>
+        <p>
+          O projeto é uma interface de consulta sobre escolas rurais do Brasil. Na prática, ele faz três coisas ao mesmo tempo:
+        </p>
+        <ol>
+          <li>carrega uma base principal local com dezenas de milhares de escolas;</li>
+          <li>permite filtrar, buscar, paginar e abrir fichas detalhadas de cada escola;</li>
+          <li>enriquece a leitura com indicadores externos do IBGE e com um cache complementar por escola.</li>
+        </ol>
+        <p>
+          Isso significa que o projeto não é apenas uma página estática. Ele é uma pequena aplicação front-end,
+          toda escrita em JavaScript puro, com estado global, renderização dinâmica, integrações assíncronas
+          e comportamento responsivo para desktop e mobile.
+        </p>
+
+        <div class="grid-3">
+          <article class="card">
+            <h3>Camada 1 - Base local</h3>
+            <p>
+              O arquivo <code>escolas-rurais.json</code> é a espinha dorsal do sistema. Ele alimenta os filtros,
+              os contadores, a tabela de resultados e a maior parte da ficha da escola.
+            </p>
+          </article>
+          <article class="card">
+            <h3>Camada 2 - Indicadores territoriais</h3>
+            <p>
+              O projeto consulta APIs do IBGE para buscar alfabetização, renda per capita, escolaridade
+              por território e os metadados oficiais de estados e municípios.
+            </p>
+          </article>
+          <article class="card">
+            <h3>Camada 3 - Enriquecimento por escola</h3>
+            <p>
+              O arquivo <code>school-enrichment-cache.json</code> guarda uma camada extra derivada de uma ficha
+              pública por escola. Esse cache é consumido pela ficha do modal.
+            </p>
+          </article>
+        </div>
+
+        <div class="note">
+          <span class="label">Ponto central</span>
+          <p>
+            A ideia arquitetural mais importante do projeto é esta: a base local controla a navegação principal,
+            e as fontes externas entram como enriquecimento progressivo. Isso deixa a interface rápida para abrir,
+            mesmo quando algumas integrações demoram ou falham.
+          </p>
+        </div>
+
+        <div class="tip">
+          <span class="label">Origem da base local</span>
+          <p>
+            O arquivo <code>escolas-rurais.json</code> não surgiu do nada. Ele é o resultado do trabalho de estruturação
+            feito em cima da planilha <code>escolas-rurais-atualizadas</code>, fornecida pelo professor Átila Barros.
+            Em outras palavras: a planilha foi a matéria-prima e o JSON foi a forma final preparada para a aplicação.
+          </p>
+        </div>
+      </section>
+
+      <section class="doc-section" id="secao-2">
+        <h2>2. Como estudar este código sem se perder</h2>
+        <p>
+          Quem está começando costuma tentar entender tudo de uma vez. Isso gera ansiedade e confusão. Neste projeto,
+          a melhor estratégia é seguir uma ordem de leitura.
+        </p>
+
+        <ol>
+          <li>Abra <code>index.html</code> e veja apenas a estrutura da página.</li>
+          <li>Depois leia <code>style.css</code> só para identificar os grandes blocos visuais.</li>
+          <li>Em <code>script.js</code>, comece pelo topo: constantes, objeto <code>app</code> e objeto <code>els</code>.</li>
+          <li>Em seguida, leia o ciclo principal: <code>bindEvents()</code>, <code>loadLocalData()</code>, <code>applyFilters()</code>, <code>renderTable()</code>.</li>
+          <li>Só depois disso avance para os painéis do IBGE e para a ficha da escola.</li>
+        </ol>
+
+        <div class="tip">
+          <span class="label">Regra prática</span>
+          <p>Quando olhar para uma função, faça sempre estas três perguntas:</p>
+          <ol>
+            <li>de onde ela recebe informação;</li>
+            <li>o que ela transforma;</li>
+            <li>qual parte da tela ela atualiza.</li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="doc-section page-break" id="secao-3">
+        <h2>3. Mapa dos arquivos</h2>
+        <p>
+          O projeto principal está concentrado em poucos arquivos. Isso tem a vantagem de ser fácil de abrir e a desvantagem
+          de concentrar muita responsabilidade em um único <code>script.js</code>.
+        </p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Arquivo</th>
+              <th>Papel</th>
+              <th>O que você costuma editar aqui</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>index.html</code></td>
+              <td>Estrutura da página, filtros, cards, áreas de resultado e containers dos modais.</td>
+              <td>Adicionar novas seções, novos botões, novos elementos que depois serão controlados pelo JS.</td>
+            </tr>
+            <tr>
+              <td><code>style.css</code></td>
+              <td>Visual da home, tabela, dashboard, modais, ficha da escola, responsividade e impressão visual.</td>
+              <td>Ajustar layout, tipografia, espaçamento, responsividade e estados visuais.</td>
+            </tr>
+            <tr>
+              <td><code>script.js</code></td>
+              <td>Lógica da aplicação: estado global, fetch, filtros, renderização, integração com APIs e modais.</td>
+              <td>Quase toda manutenção funcional do projeto.</td>
+            </tr>
+            <tr>
+              <td><code>escolas-rurais.json</code></td>
+              <td>Base local principal das escolas.</td>
+              <td>Normalmente você não edita na mão. O ideal é regenerar a partir da planilha fonte.</td>
+            </tr>
+            <tr>
+              <td><code>school-enrichment-cache.json</code></td>
+              <td>Cache complementar por código INEP, usado na ficha da escola.</td>
+              <td>Atualizar via script, não manualmente.</td>
+            </tr>
+            <tr>
+              <td><code>scripts/build-school-enrichment.mjs</code></td>
+              <td>Script que lê a ficha pública externa e gera o cache complementar local.</td>
+              <td>Corrigir parser, adicionar novos campos ou filtrar dados inadequados.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="warning">
+          <span class="label">Importante</span>
+          <p>
+            O projeto roda só com front-end e arquivos locais. Isso é ótimo para simplicidade, mas significa que parte das integrações
+            depende de o navegador permitir requisições e de o arquivo ser aberto em contexto compatível. Por isso existe fallback com
+            <code>XMLHttpRequest</code> no carregamento da base local.
+          </p>
+        </div>
+      </section>
+
+      <section class="doc-section" id="secao-4">
+        <h2>4. Fluxo geral da aplicação</h2>
+        <p>Antes de entrar em cada arquivo, vale visualizar o ciclo completo. Este é o fluxo real da aplicação:</p>
+
+        <div class="flow">1. O navegador abre index.html
+2. O HTML carrega style.css e script.js
+3. O script cria constantes, estado global e referências DOM
+4. bindEvents() registra os eventos de clique, change, keydown e input
+5. loadLocalData() carrega escolas-rurais.json
+6. detectColumns() descobre quais colunas do JSON correspondem a cada campo lógico
+7. buildFilters() preenche os selects
+8. applyFilters() gera app.filteredRows
+9. renderStats() e renderTable() desenham a tela principal
+10. updateLiteracyPanel(), updateIncomePanel() e updateEducationDashboard() consultam o IBGE
+11. Ao clicar numa linha, openSchoolModalById() monta a ficha da escola
+12. A ficha carrega complementos: enriquecimento local, renda e alfabetização</div>
+
+        <p>
+          Repare que o fluxo é incremental. A home funciona primeiro com a base local. Depois, em paralelo, os indicadores
+          externos completam a experiência. Isso evita que a tela fique inutilizável enquanto uma API externa responde.
+        </p>
+      </section>
+
+      <section class="doc-section" id="secao-5">
+        <h2>5. Anatomia do HTML</h2>
+        <p>
+          O <code>index.html</code> é curto e organizado por seções. Isso é bom porque separa bem os containers visuais.
+          O HTML não tenta fazer lógica. Ele apenas cria “lugares” para o JavaScript preencher.
+        </p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Trecho</th>
+              <th>Função</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>.hero</code></td><td>Faixa superior com a marca.</td></tr>
+            <tr><td><code>.filters-bar</code></td><td>Área dos filtros e da busca.</td></tr>
+            <tr><td><code>.stats</code></td><td>Conjunto de cards-resumo da home.</td></tr>
+            <tr><td><code>.literacy-panel</code></td><td>Painel de alfabetização.</td></tr>
+            <tr><td><code>.results-card</code></td><td>Resumo de resultados, paginação e tabela/lista.</td></tr>
+            <tr><td><code>.education-dashboard</code></td><td>Dashboard comparativo de escolaridade por território.</td></tr>
+            <tr><td><code>#schoolModal</code></td><td>Container do modal principal da ficha da escola.</td></tr>
+            <tr><td><code>#sourcesModal</code></td><td>Container do modal de fontes da base de dados.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>5.1 Por que quase tudo tem id?</h3>
+        <p>
+          Porque o JavaScript precisa encontrar esses elementos rapidamente com <code>document.getElementById()</code>.
+          Esse padrão aparece no objeto <code>els</code>. A lógica é simples: o HTML define o ponto de montagem,
+          e o JS centraliza as referências a esses pontos num único lugar.
+        </p>
+
+        <h3>5.2 O HTML já vem com dados prontos?</h3>
+        <p>
+          Não. A maior parte do conteúdo dinâmico começa com textos como “Carregando...” ou containers vazios.
+          Isso é intencional. Depois que os dados chegam, o JavaScript substitui o conteúdo.
+        </p>
+      </section>
+
+      <section class="doc-section" id="secao-6">
+        <h2>6. Anatomia do CSS</h2>
+        <p>
+          O <code>style.css</code> concentra todo o comportamento visual. Ele não está separado por comentários grandes,
+          então a melhor maneira de lê-lo é por blocos de classe.
+        </p>
+
+        <div class="grid-2">
+          <article class="card">
+            <h3>Parte 1 - Base visual</h3>
+            <p>
+              No topo do arquivo ficam as variáveis CSS em <code>:root</code>, as regras globais, o fundo geral,
+              o padrão dos cards e os estilos de formulário.
+            </p>
+          </article>
+          <article class="card">
+            <h3>Parte 2 - Home</h3>
+            <p>
+              Depois vêm filtros, stats, painéis, tabela e dashboard. Essa parte define praticamente toda a home.
+            </p>
+          </article>
+          <article class="card">
+            <h3>Parte 3 - Ficha da escola</h3>
+            <p>
+              Mais adiante aparecem as classes do modal, da estrutura interna da ficha, do mapa e dos blocos complementares.
+            </p>
+          </article>
+          <article class="card">
+            <h3>Parte 4 - Responsividade</h3>
+            <p>
+              No final estão os media queries para desktop menor, tablet, smartphone e ajustes específicos do modo mobile.
+            </p>
+          </article>
+        </div>
+
+        <h3>6.1 Decisão importante: lista mobile em vez de tabela completa</h3>
+        <p>
+          No desktop, a área de resultados é uma tabela com várias colunas. No mobile, isso foi transformado numa lista em que
+          apenas a coluna da escola permanece visível. Essa decisão reduz ruído e faz sentido para toque: no celular a pessoa toca
+          no nome e abre a ficha para ver o restante.
+        </p>
+
+        <h3>6.2 Onde mexer quando o layout quebra</h3>
+        <ol>
+          <li>procure a classe visual do bloco em si;</li>
+          <li>depois procure o media query que altera esse bloco;</li>
+          <li>veja se existe alguma regra com <code>max-width</code>, <code>grid-template-columns</code> ou <code>display</code> alterando o comportamento.</li>
+        </ol>
+
+        <div class="tip">
+          <span class="label">Regra prática</span>
+          <p>
+            Em problemas de layout deste projeto, os culpados mais comuns são:
+            <code>max-width</code>, <code>grid-column</code>, <code>white-space</code>, <code>word-break</code>
+            e regras diferentes dentro dos media queries.
+          </p>
+        </div>
+      </section>
+
+      <section class="doc-section page-break" id="secao-7">
+        <h2>7. Arquitetura do JavaScript</h2>
+        <p>
+          O <code>script.js</code> é o coração da aplicação. Ele é grande e faz muita coisa, então o jeito certo de entendê-lo
+          é dividi-lo mentalmente em camadas.
+        </p>
+
+        <h3>7.1 Camada de configuração</h3>
+        <p>
+          No topo do arquivo ficam constantes como <code>DATA_URL</code>, IDs de tabelas do SIDRA, nomes de fonte, chaves de filtros
+          e a definição das colunas da tabela principal. Essa parte responde à pergunta: “quais dados o sistema conhece?”.
+        </p>
+
+        <h3>7.2 Camada de estado global</h3>
+        <p>O objeto <code>app</code> é o estado global do projeto. Ele guarda:</p>
+        <ul>
+          <li><code>rawRows</code>: todas as linhas da base principal;</li>
+          <li><code>filteredRows</code>: linhas depois da aplicação dos filtros;</li>
+          <li><code>columns</code>: mapeamento entre campo lógico e nome real da coluna do JSON;</li>
+          <li>estado de paginação;</li>
+          <li>estado dos modais;</li>
+          <li>caches de alfabetização, renda, escolaridade e enriquecimento por escola.</li>
+        </ul>
+
+        <div class="note">
+          <span class="label">Conceito importante</span>
+          <p>
+            Quando falamos que um dado é “global” neste projeto, normalmente estamos dizendo que ele fica dentro do objeto
+            <code>app</code> e pode ser reutilizado por várias funções. Esse foi justamente o mecanismo escolhido para resolver a
+            necessidade de compartilhar dados do <code>fetch</code> com o resto da aplicação.
+          </p>
+        </div>
+
+        <h3>7.3 Camada de referências DOM</h3>
+        <p>
+          O objeto <code>els</code> centraliza as referências aos elementos do HTML. Isso evita ficar repetindo
+          <code>document.getElementById()</code> pelo arquivo inteiro e deixa mais claro quais nós da interface existem.
+        </p>
+
+        <h3>7.4 Camada utilitária</h3>
+        <p>
+          Funções como <code>normalize()</code>, <code>text()</code>, <code>escapeHtml()</code> e <code>renderValue()</code>
+          fazem pequenos tratamentos que são reutilizados o tempo todo. Elas resolvem problemas clássicos:
+        </p>
+        <ul>
+          <li>comparar texto sem acento e sem diferença entre maiúsculas e minúsculas;</li>
+          <li>garantir que valores <code>null</code> ou vazios não quebrem a interface;</li>
+          <li>evitar injeção de HTML ao montar strings para <code>innerHTML</code>.</li>
+        </ul>
+
+        <h3>7.5 Camada de acesso ao dado local</h3>
+        <p>
+          Aqui entram <code>detectColumn()</code>, <code>detectColumns()</code> e <code>get()</code>.
+        </p>
+        <p>
+          A função <code>detectColumns()</code> olha o cabeçalho real do JSON e tenta descobrir qual coluna corresponde a cada campo
+          lógico do sistema. Isso é muito útil quando a planilha de origem muda ligeiramente de nome, por exemplo
+          “Município” versus “Municipio”.
+        </p>
+        <p>
+          Depois que esse mapeamento é criado, a função <code>get(row, key)</code> permite acessar um campo por nome lógico,
+          sem que o resto do projeto precise saber qual era o texto exato da coluna original.
+        </p>
+
+        <h3>7.6 Mapa das funções mais importantes</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Função</th>
+              <th>Responsabilidade</th>
+              <th>Quando você costuma mexer nela</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>loadLocalData()</code></td>
+              <td>Carrega a base local e dispara a inicialização real da aplicação.</td>
+              <td>Quando muda a origem da base ou a forma de carregamento.</td>
+            </tr>
+            <tr>
+              <td><code>buildFilters()</code></td>
+              <td>Preenche os filtros com base nos dados disponíveis.</td>
+              <td>Quando entra um novo filtro ou uma nova ordenação.</td>
+            </tr>
+            <tr>
+              <td><code>applyFilters()</code></td>
+              <td>Aplica busca e filtros sobre a base completa.</td>
+              <td>Quando a lógica de filtragem muda.</td>
+            </tr>
+            <tr>
+              <td><code>renderTable()</code></td>
+              <td>Desenha a tabela ou lista de resultados.</td>
+              <td>Quando a home muda de layout ou colunas.</td>
+            </tr>
+            <tr>
+              <td><code>renderSchoolSheet()</code></td>
+              <td>Monta a ficha completa da escola.</td>
+              <td>Quando você quer incluir, remover ou reorganizar blocos do modal.</td>
+            </tr>
+            <tr>
+              <td><code>ensureBaseLiteracyLoaded()</code></td>
+              <td>Busca o núcleo de alfabetização no IBGE.</td>
+              <td>Quando muda a tabela, o ano ou o recorte.</td>
+            </tr>
+            <tr>
+              <td><code>ensureBaseIncomeLoaded()</code></td>
+              <td>Busca o núcleo de renda per capita no IBGE.</td>
+              <td>Quando muda a variável de renda ou o recorte territorial.</td>
+            </tr>
+            <tr>
+              <td><code>ensureEducationDashboardLoaded()</code></td>
+              <td>Carrega os perfis do dashboard de escolaridade.</td>
+              <td>Quando o painel de desigualdade educacional evolui.</td>
+            </tr>
+            <tr>
+              <td><code>updateOpenSchoolModalEnrichment()</code></td>
+              <td>Atualiza a parte complementar da ficha depois que o modal abre.</td>
+              <td>Quando o cache complementar muda de formato.</td>
+            </tr>
+            <tr>
+              <td><code>bindEvents()</code></td>
+              <td>Conecta a interface às funções do sistema.</td>
+              <td>Quando surge um novo botão, filtro ou gesto de interação.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="doc-section" id="secao-8">
+        <h2>8. Modelo de dados local</h2>
+        <p>
+          A base principal do projeto é o arquivo <code>escolas-rurais.json</code>. O código não acessa esse JSON diretamente
+          pelo nome cru das colunas. Em vez disso, ele mapeia os campos esperados e depois trabalha com chaves lógicas.
+        </p>
+
+        <h3>8.1 Campos principais esperados</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Chave lógica</th>
+              <th>Significado</th>
+              <th>Onde aparece</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>school</code></td><td>Nome da escola</td><td>Tabela, busca, ficha do modal</td></tr>
+            <tr><td><code>inep</code></td><td>Código INEP</td><td>Tabela e identificação da ficha</td></tr>
+            <tr><td><code>uf</code></td><td>Sigla do estado</td><td>Filtros, territorialização, fichas e cruzamentos IBGE</td></tr>
+            <tr><td><code>city</code></td><td>Município</td><td>Filtros, tabela, indicadores municipais</td></tr>
+            <tr><td><code>dependency</code></td><td>Dependência administrativa</td><td>Filtro “Categoria” e tags da ficha</td></tr>
+            <tr><td><code>differentiatedLocation</code></td><td>Área diferenciada</td><td>Filtro “Área” e ficha</td></tr>
+            <tr><td><code>councilRegulation</code></td><td>Status no conselho</td><td>Filtro “Status”, tags e ficha</td></tr>
+            <tr><td><code>schoolSize</code></td><td>Porte da escola</td><td>Filtro “Porte”, tabela e ficha</td></tr>
+            <tr><td><code>stages</code></td><td>Etapas e modalidades</td><td>Filtro “Modalidade”, tabela e ficha</td></tr>
+            <tr><td><code>address</code>, <code>phone</code>, <code>latitude</code>, <code>longitude</code></td><td>Dados de localização e contato</td><td>Ficha da escola e minimapa</td></tr>
+          </tbody>
+        </table>
+
+        <h3>8.2 O que é um campo derivado</h3>
+        <p>
+          Um campo derivado é um campo que não existe de forma explícita no JSON, mas pode ser calculado a partir de outro.
+          O melhor exemplo aqui é a <code>região</code>. O JSON traz a UF. A região é obtida consultando o objeto
+          <code>regioesPorUF</code>.
+        </p>
+        <p>
+          É por isso que o filtro de região não depende de uma coluna real da planilha. Ele depende da função
+          <code>getFilterValue()</code>.
+        </p>
+      </section>
+
+      <section class="doc-section" id="secao-9">
+        <h2>9. Sistema de filtros</h2>
+        <p>
+          O sistema de filtros é uma das partes mais importantes do projeto. Ele foi desenhado para ter um núcleo genérico,
+          mas também aceita exceções, como filtros derivados.
+        </p>
+
+        <h3>9.1 Estrutura-base dos filtros</h3>
+        <p>
+          O array <code>FILTER_SELECTS</code> lista os filtros do tipo <code>select</code>. Cada item informa:
+        </p>
+        <ul>
+          <li>qual elemento do DOM representa o filtro;</li>
+          <li>qual chave lógica do dado ele filtra;</li>
+          <li>qual rótulo deve aparecer quando nada foi selecionado.</li>
+        </ul>
+
+        <h3>9.2 Filtros que se montam automaticamente</h3>
+        <p>
+          A função <code>buildFilters()</code> percorre esse array e preenche os selects com valores únicos extraídos da base.
+          Essa é a razão pela qual adicionar um filtro simples é relativamente barato: se o campo já existe no JSON, o próprio
+          sistema consegue montar as opções.
+        </p>
+
+        <h3>9.3 Filtro derivado de região</h3>
+        <p>
+          A região não vem pronta na base. Então o projeto usa <code>getFilterValue(row, key)</code>. Se a chave pedida for
+          <code>region</code>, a função consulta <code>getRegionByUf()</code> em vez de procurar uma coluna.
+        </p>
+
+        <h3>9.4 Encadeamento entre região, UF e município</h3>
+        <ol>
+          <li>Ao escolher uma região, o filtro de UF é reconstruído para exibir apenas estados daquela região.</li>
+          <li>Ao escolher uma UF, o filtro de região é sincronizado automaticamente e o filtro de município é reconstruído com as cidades daquela UF.</li>
+          <li>Ao tentar abrir município sem UF, a interface bloqueia e mostra um aviso leve.</li>
+        </ol>
+
+        <div class="flow">Região muda
+-> limpa UF
+-> limpa Município
+-> syncUfFilterOptions()
+-> syncCityFilterOptions()
+-> applyFilters()
+
+UF muda
+-> sincroniza Região
+-> syncUfFilterOptions()
+-> syncCityFilterOptions()
+-> applyFilters()</div>
+
+        <h3>9.5 Busca por texto</h3>
+        <p>
+          A busca por nome é combinada com os filtros. Isso quer dizer que a aplicação não escolhe entre “buscar” ou “filtrar”.
+          Ela faz as duas coisas juntas dentro de <code>applyFilters()</code>.
+        </p>
+
+        <h3>9.6 Por que existe <code>debounce()</code>?</h3>
+        <p>
+          Porque, sem ele, cada letra digitada dispararia imediatamente uma filtragem completa sobre a base inteira.
+          O <code>debounce</code> espera alguns milissegundos após a digitação parar. Isso melhora a experiência.
+        </p>
+      </section>
+
+      <section class="doc-section" id="secao-10">
+        <h2>10. Busca, paginação e tabela</h2>
+        <p>A sequência principal da home é esta:</p>
+        <ol>
+          <li><code>applyFilters()</code> recalcula <code>app.filteredRows</code>;</li>
+          <li><code>refreshResults()</code> chama <code>renderStats()</code> e <code>renderTable()</code>;</li>
+          <li><code>renderTable()</code> monta a tabela atual com base na página visível.</li>
+        </ol>
+
+        <h3>10.1 Paginação</h3>
+        <p>
+          A paginação é simples e eficiente. O sistema não pede novas páginas ao servidor. Ele já tem tudo em memória e só calcula
+          um recorte da lista filtrada:
+        </p>
+
+        <pre><code>const startIndex = (app.currentPage - 1) * app.pageSize;
+const endIndex = Math.min(startIndex + app.pageSize, app.filteredRows.length);
+const visibleRows = app.filteredRows.slice(startIndex, endIndex);</code></pre>
+
+        <p>Isso é bom porque a base é local. Não existe paginação remota aqui.</p>
+
+        <h3>10.2 A tabela é realmente clicável por linha</h3>
+        <p>
+          Em vez de colocar links espalhados, o projeto marca cada linha com <code>data-school-id</code> e usa delegação de evento.
+          Isso permite abrir a ficha clicando em qualquer ponto da linha.
+        </p>
+
+        <h3>10.3 Desktop e mobile têm duas leituras diferentes</h3>
+        <p>
+          No desktop, a tabela aparece com várias colunas. No mobile, quase todas as células são escondidas e fica visível apenas a
+          célula da escola, transformada em um cartão enxuto. Esse é um bom exemplo de responsividade orientada à tarefa, não apenas à largura.
+        </p>
+      </section>
+
+      <section class="doc-section page-break" id="secao-11">
+        <h2>11. Painéis e indicadores externos</h2>
+        <p>O projeto consome APIs do IBGE em três frentes distintas:</p>
+        <ul>
+          <li>alfabetização;</li>
+          <li>renda per capita;</li>
+          <li>dashboard de escolaridade por território.</li>
+        </ul>
+
+        <h3>11.1 Duas APIs diferentes do IBGE</h3>
+        <table>
+          <thead>
+            <tr><th>API</th><th>Papel no projeto</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>IBGE Localidades</td><td>Resolver estados, regiões e municípios oficiais, com seus códigos.</td></tr>
+            <tr><td>SIDRA</td><td>Trazer os indicadores estatísticos em si.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>11.2 Por que o projeto guarda caches em <code>Map</code></h3>
+        <p>
+          Porque alguns indicadores são consultados por território várias vezes. Se cada mudança de filtro disparasse tudo do zero,
+          a interface ficaria lenta e faria requisições repetidas sem necessidade.
+        </p>
+        <p>Por isso o estado global guarda, por exemplo:</p>
+        <ul>
+          <li><code>app.literacy.regionRates</code> e <code>app.literacy.stateRates</code>;</li>
+          <li><code>app.income.regionValues</code> e <code>app.income.stateValues</code>;</li>
+          <li><code>municipalityCatalogByUf</code> e <code>municipalityValuesByUf</code>;</li>
+          <li>promises pendentes para evitar requisições duplicadas.</li>
+        </ul>
+
+        <h3>11.3 Painel de alfabetização</h3>
+        <p>
+          A função <code>ensureBaseLiteracyLoaded()</code> carrega Brasil, regiões e estados. Quando há uma UF selecionada,
+          <code>ensureMunicipalityLiteracyByUf()</code> completa os dados dos municípios daquela UF.
+        </p>
+        <p>
+          Depois disso, <code>buildLiteracySnapshot()</code> monta um retrato do contexto atual, e
+          <code>createLiteracyMetrics()</code> transforma esse retrato em cards renderizáveis.
+        </p>
+
+        <h3>11.4 Card de renda per capita</h3>
+        <p>A renda per capita da home mostra o recorte mais relevante do momento:</p>
+        <ul>
+          <li>sem território selecionado: Brasil;</li>
+          <li>com região selecionada: região;</li>
+          <li>com UF selecionada: UF;</li>
+          <li>com município selecionado: ainda usa a UF, porque esse foi o recorte definido para a home.</li>
+        </ul>
+
+        <h3>11.5 Dashboard de desigualdade educacional</h3>
+        <p>O dashboard territorial usa perfis de escolaridade com base na população de 25 anos ou mais. Ele trabalha com indicadores cumulativos:</p>
+        <ul>
+          <li>fundamental incompleto;</li>
+          <li>pelo menos fundamental completo;</li>
+          <li>pelo menos ensino médio completo;</li>
+          <li>superior completo;</li>
+          <li>anos médios de estudo.</li>
+        </ul>
+
+        <div class="warning">
+          <span class="label">Interpretação correta</span>
+          <p>
+            Como parte dos indicadores é cumulativa, a soma pode passar de 100%. Isso não é bug. Isso acontece porque quem concluiu
+            o ensino superior já está incluído em “pelo menos ensino médio completo” e também em “pelo menos fundamental completo”.
+          </p>
+        </div>
+      </section>
+
+      <section class="doc-section" id="secao-12">
+        <h2>12. Ficha da escola e modais</h2>
+        <p>
+          A ficha da escola é montada inteiramente por JavaScript. Ela não existe pronta no HTML.
+          Quando o usuário clica numa linha, o sistema chama <code>openSchoolModalById()</code>,
+          injeta o HTML da ficha e abre o modal.
+        </p>
+
+        <h3>12.1 Estrutura da ficha</h3>
+        <p>A função <code>renderSchoolSheet(row)</code> organiza a ficha em seções:</p>
+        <ol>
+          <li>cabeçalho com tags e nome da escola;</li>
+          <li>localização e minimapa;</li>
+          <li>identificação;</li>
+          <li>oferta educacional;</li>
+          <li>matrículas por etapa;</li>
+          <li>contexto de renda;</li>
+          <li>dados complementares da escola;</li>
+          <li>contexto de alfabetização.</li>
+        </ol>
+
+        <h3>12.2 Renderização progressiva</h3>
+        <p>
+          Nem tudo da ficha chega de uma vez. Ao abrir o modal, o sistema já renderiza o corpo principal com placeholders.
+          Em seguida, dispara três atualizações assíncronas:
+        </p>
+        <ul>
+          <li><code>updateOpenSchoolModalEnrichment()</code>;</li>
+          <li><code>updateOpenSchoolModalIncome()</code>;</li>
+          <li><code>updateOpenSchoolModalLiteracy()</code>.</li>
+        </ul>
+        <p>Isso faz com que o modal abra rápido, mesmo que as integrações complementares demorem.</p>
+
+        <h3>12.3 Segundo modal: fontes da base</h3>
+        <p>
+          O projeto também ganhou um modal separado para explicar a origem de cada dado usado. Esse modal é aberto pelo link
+          “Verificar fontes da base de dados” no final da home e é montado pela função <code>renderDataSourcesSheet()</code>.
+        </p>
+
+        <h3>12.4 Controle de abertura e fechamento</h3>
+        <p>Para os modais coexistirem sem conflito, o projeto usa:</p>
+        <ul>
+          <li>classes <code>is-visible</code> para mostrar e esconder;</li>
+          <li><code>aria-hidden</code> para acessibilidade;</li>
+          <li><code>syncModalBodyState()</code> para travar o scroll do body quando qualquer modal estiver aberto;</li>
+          <li>fechamento por botão, clique no overlay e tecla <code>Escape</code>.</li>
+        </ul>
+      </section>
+
+      <section class="doc-section" id="secao-13">
+        <h2>13. Cache complementar do Cultura Educa</h2>
+        <p>
+          O projeto não consulta diretamente a ficha pública do Cultura Educa a cada clique. Em vez disso, usa um cache local.
+          Essa decisão melhora a estabilidade, reduz dependência de rede e evita problemas de CORS ou mudanças repentinas da página.
+        </p>
+
+        <h3>13.1 O que faz o script <code>build-school-enrichment.mjs</code></h3>
+        <ol>
+          <li>lê a base principal para descobrir códigos INEP;</li>
+          <li>acessa a ficha pública da escola;</li>
+          <li>extrai tabelas HTML por título;</li>
+          <li>normaliza linhas e valores;</li>
+          <li>gera um JSON local por código INEP.</li>
+        </ol>
+
+        <h3>13.2 Ponto importante: parser de booleanos</h3>
+        <p>
+          Um dos problemas reais que surgiu foi a leitura errada de checks visuais. Na fonte pública, havia casos em que o “não”
+          aparecia com um check discreto, e o parser precisava diferenciar isso do check preto forte que significa “sim”.
+        </p>
+        <p>
+          Esse tipo de problema ensina uma lição importante: scraping de HTML nunca deve assumir que aparência visual e valor lógico
+          são equivalentes sem tratamento explícito.
+        </p>
+
+        <div class="note">
+          <span class="label">Lição prática</span>
+          <p>
+            Sempre que você trouxer um dado externo e ele parecer contraditório, a primeira pergunta deve ser:
+            “o erro está no meu parser, no meu mapeamento ou na fonte original?”.
+          </p>
+        </div>
+      </section>
+
+      <section class="doc-section page-break" id="secao-14">
+        <h2>14. Receitas de manutenção</h2>
+
+        <h3>14.1 Como adicionar um novo filtro simples vindo do JSON</h3>
+        <ol>
+          <li>Adicione o <code>select</code> no <code>index.html</code>.</li>
+          <li>Inclua o novo elemento no objeto <code>els</code>.</li>
+          <li>Garanta que <code>detectColumns()</code> saiba encontrar a coluna.</li>
+          <li>Inclua o filtro em <code>FILTER_SELECTS</code>.</li>
+          <li>Se quiser uma ordenação específica, adicione em <code>FILTER_VALUE_ORDER</code>.</li>
+          <li>Se ele for um filtro comum, o próprio <code>buildFilters()</code> já vai preencher as opções.</li>
+        </ol>
+
+        <h3>14.2 Como adicionar um filtro derivado</h3>
+        <p>
+          Se o valor não existe como coluna real na base, você precisa tratar em <code>getFilterValue()</code>.
+          Foi exatamente assim que o filtro por região foi resolvido.
+        </p>
+
+        <pre><code>function getFilterValue(row, key) {
+  if (key === "region") {
+    return getRegionByUf(get(row, "uf"));
+  }
+
+  return get(row, key);
+}</code></pre>
+
+        <h3>14.3 Como adicionar um novo campo na ficha da escola</h3>
+        <ol>
+          <li>Descubra se o dado vem da base local ou de uma integração externa.</li>
+          <li>Se vier da base local, garanta o mapeamento em <code>detectColumns()</code>.</li>
+          <li>Monte o campo com <code>renderProfileField()</code> ou uma função de render própria.</li>
+          <li>Insira o bloco dentro de <code>renderSchoolSheet()</code>.</li>
+          <li>Se depender de dados externos, crie também placeholder e atualização assíncrona.</li>
+        </ol>
+
+        <h3>14.4 Como adicionar um novo painel vindo de API</h3>
+        <ol>
+          <li>Declare constantes de tabela, variável, ano e rótulo da fonte.</li>
+          <li>Crie uma função <code>ensureBaseXLoaded()</code> para buscar e armazenar os dados no estado global.</li>
+          <li>Crie um snapshot de contexto, como <code>buildIncomeSnapshot()</code> ou <code>buildLiteracySnapshot()</code>.</li>
+          <li>Crie a função de renderização do painel.</li>
+          <li>Chame a atualização dentro de <code>applyFilters()</code>.</li>
+        </ol>
+
+        <h3>14.5 Como ajustar algo só no mobile</h3>
+        <ol>
+          <li>Encontre a classe principal do bloco.</li>
+          <li>Procure os media queries do final do CSS.</li>
+          <li>Veja se já existe uma regra específica para aquele bloco em <code>@media (max-width: 700px)</code> ou <code>@media (max-width: 560px)</code>.</li>
+          <li>Faça o ajuste ali, não no estilo base, se a mudança for apenas mobile.</li>
+        </ol>
+
+        <h3>14.6 Como pensar novas implementações sem bagunçar tudo</h3>
+        <p>Use este raciocínio:</p>
+        <ol>
+          <li>o novo dado é local, derivado ou externo?</li>
+          <li>ele entra como filtro, card, painel, modal ou detalhe da ficha?</li>
+          <li>ele precisa estar disponível logo na abertura da página ou pode ser carregado depois?</li>
+          <li>ele precisa de cache?</li>
+        </ol>
+      </section>
+
+      <section class="doc-section" id="secao-15">
+        <h2>15. Checklist de depuração</h2>
+        <p>
+          Quando alguma coisa quebra, siga este checklist. Ele foi pensado para evitar que você fique “caçando bug no escuro”.
+        </p>
+
+        <h3>15.1 Se um filtro não funciona</h3>
+        <ul>
+          <li>confirme se o elemento existe no HTML;</li>
+          <li>confirme se ele está em <code>els</code>;</li>
+          <li>veja se está em <code>FILTER_SELECTS</code>;</li>
+          <li>veja se a coluna existe em <code>detectColumns()</code> ou em <code>getFilterValue()</code>;</li>
+          <li>confirme se <code>applyFilters()</code> está sendo chamado após a mudança.</li>
+        </ul>
+
+        <h3>15.2 Se um dado do modal aparece vazio</h3>
+        <ul>
+          <li>o dado vem do JSON local?</li>
+          <li>o dado vem do cache complementar?</li>
+          <li>a função de render foi chamada antes da resposta assíncrona?</li>
+          <li>o código INEP está correto?</li>
+          <li>houve correspondência automática de município/UF no IBGE?</li>
+        </ul>
+
+        <h3>15.3 Se o texto aparece com acentuação estranha</h3>
+        <ul>
+          <li>confirme se o arquivo está salvo em UTF-8;</li>
+          <li>confirme se o HTML mantém <code>&lt;meta charset="UTF-8"&gt;</code>;</li>
+          <li>veja se o dado já veio corrompido da fonte externa;</li>
+          <li>evite salvar os arquivos em ANSI no editor.</li>
+        </ul>
+
+        <h3>15.4 Se a interface quebra no smartphone</h3>
+        <ul>
+          <li>veja o bloco no CSS base;</li>
+          <li>depois veja os media queries;</li>
+          <li>procure por <code>max-width</code>, <code>grid-template-columns</code> e <code>width</code> fixo;</li>
+          <li>inspecione se o problema vem de texto sem quebra ou de coluna com largura rígida.</li>
+        </ul>
+      </section>
+
+      <section class="doc-section" id="secao-16">
+        <h2>16. Dívidas técnicas e pontos de atenção</h2>
+        <p>
+          Todo projeto real tem compromissos e atalhos. Conhecê-los ajuda muito mais do que fingir que eles não existem.
+        </p>
+
+        <h3>16.1 O <code>script.js</code> está monolítico</h3>
+        <p>
+          Hoje ele concentra praticamente toda a aplicação. Isso funciona, mas dificulta manutenção futura.
+          Uma evolução natural seria separar em módulos, por exemplo:
+        </p>
+        <ul>
+          <li><code>data/local-base.js</code>;</li>
+          <li><code>data/ibge.js</code>;</li>
+          <li><code>ui/filters.js</code>;</li>
+          <li><code>ui/table.js</code>;</li>
+          <li><code>ui/modals.js</code>.</li>
+        </ul>
+
+        <h3>16.2 Há lógica legada no final do arquivo</h3>
+        <p>
+          No fim do <code>script.js</code> existem funções e objetos legados ligados à lógica antiga de macroregião e escolas fechadas.
+          Hoje o fluxo principal já substitui isso. Esse trecho é um ótimo candidato a limpeza.
+        </p>
+
+        <h3>16.3 Há sinais de mojibake em partes do código-fonte</h3>
+        <p>
+          Mesmo quando a interface está sendo corrigida visualmente, o arquivo ainda tem trechos com acentuação corrompida no código.
+          Isso não impede o funcionamento, mas é um sinal de que seria saudável fazer uma revisão geral de codificação e normalização textual.
+        </p>
+
+        <h3>16.4 Não há testes automatizados</h3>
+        <p>
+          Hoje a validação é majoritariamente manual. Isso é comum em projetos pequenos, mas se o sistema crescer será importante adicionar,
+          pelo menos, testes de funções puras e algumas verificações de regressão em filtros e renderização.
+        </p>
+      </section>
+
+      <section class="doc-section" id="secao-17">
+        <h2>17. Glossário para iniciantes</h2>
+
+        <table>
+          <thead>
+            <tr><th>Termo</th><th>Explicação simples</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Estado global</td><td>Objeto que guarda informações importantes do sistema para várias funções reutilizarem.</td></tr>
+            <tr><td>Renderizar</td><td>Transformar dados em HTML visível na tela.</td></tr>
+            <tr><td>Snapshot</td><td>Retrato do contexto atual, usado para montar cards e painéis.</td></tr>
+            <tr><td>Placeholder</td><td>Conteúdo temporário, como “Carregando...”, mostrado antes do dado real chegar.</td></tr>
+            <tr><td>Fetch assíncrono</td><td>Requisição de dados que não retorna instantaneamente; o código precisa esperar.</td></tr>
+            <tr><td>Cache</td><td>Dado armazenado localmente para evitar baixar ou recalcular a mesma coisa várias vezes.</td></tr>
+            <tr><td>Função derivada</td><td>Função que calcula uma informação a partir de outra, como região a partir da UF.</td></tr>
+            <tr><td>Delegação de evento</td><td>Técnica em que um container escuta cliques de vários elementos internos.</td></tr>
+            <tr><td>Debounce</td><td>Atraso controlado para evitar disparar uma ação a cada tecla digitada.</td></tr>
+            <tr><td>Mojibake</td><td>Texto com acentuação quebrada por problema de codificação.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="doc-section" id="secao-18">
+        <h2>18. Como regenerar o PDF</h2>
+        <p>
+          Junto desta documentação existe um script para exportar a versão em PDF a partir deste HTML. Isso é útil porque,
+          sempre que a documentação for atualizada, você consegue gerar um PDF novo sem depender de ferramenta externa manual.
+        </p>
+
+        <pre><code>powershell -ExecutionPolicy Bypass -File .\scripts\export-project-documentation-pdf.ps1</code></pre>
+
+        <p>O script usa o Chrome instalado na máquina em modo headless para imprimir este arquivo HTML em PDF.</p>
+
+        <div class="tip">
+          <span class="label">Sugestão de hábito</span>
+          <p>
+            Sempre que você fizer uma mudança grande no projeto, atualize este documento no mesmo momento.
+            Isso reduz a chance de o material didático ficar desatualizado.
+          </p>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <p>
+          Documento produzido para apoiar aprendizado, manutenção e futuras evoluções do projeto Educação no Campo.
+        </p>
+      </footer>
+    </div>
+  </main>
+</body>
+</html>

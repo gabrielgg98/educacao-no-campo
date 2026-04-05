@@ -108,6 +108,7 @@ const app = {
   currentPage: 1,
   activeSchoolId: null,
   lastFocusedElement: null,
+  lastSourcesFocusedElement: null,
   literacy: {
     brazilRate: null,
     regionRates: null,
@@ -220,9 +221,13 @@ const els = {
   resultSummary: document.getElementById("resultSummary"),
   tableWrap: document.getElementById("tableWrap"),
   paginationWrap: document.getElementById("paginationWrap"),
+  openSourcesModal: document.getElementById("openSourcesModal"),
   schoolModal: document.getElementById("schoolModal"),
   schoolModalPanel: document.getElementById("schoolModalPanel"),
-  schoolModalContent: document.getElementById("schoolModalContent")
+  schoolModalContent: document.getElementById("schoolModalContent"),
+  sourcesModal: document.getElementById("sourcesModal"),
+  sourcesModalPanel: document.getElementById("sourcesModalPanel"),
+  sourcesModalContent: document.getElementById("sourcesModalContent")
 };
 
 els.pageSizeFilter.value = String(DEFAULT_PAGE_SIZE);
@@ -2313,6 +2318,159 @@ function renderSectionSource(label) {
   return `<p class="school-sheet__section-source">Fonte: ${escapeHtml(label)}</p>`;
 }
 
+function renderDataSourceCard({ title, description, bullets = [], source, fullWidth = false }) {
+  const listMarkup = bullets.length
+    ? `
+      <ul class="sources-sheet__list">
+        ${bullets.map(item => `
+          <li>
+            <strong>${escapeHtml(item.label)}:</strong> ${escapeHtml(item.copy)}
+          </li>
+        `).join("")}
+      </ul>
+    `
+    : "";
+  const modifier = fullWidth ? " sources-sheet__card--full" : "";
+
+  return `
+    <article class="sources-sheet__card${modifier}">
+      <h5 class="sources-sheet__card-title">${escapeHtml(title)}</h5>
+      <p class="sources-sheet__card-description">${escapeHtml(description)}</p>
+      ${listMarkup}
+      <p class="sources-sheet__card-source">Fonte: ${escapeHtml(source)}</p>
+    </article>
+  `;
+}
+
+function renderDataSourcesSheet() {
+  const cards = [
+    {
+      title: "Base local do projeto",
+      description: "É a base que sustenta a home, os filtros, os resultados e os dados principais da ficha de cada escola.",
+      bullets: [
+        {
+          label: "Arquivo central",
+          copy: "O arquivo escolas-rurais.json é o resultado do trabalho que fizemos em cima da planilha escolas-rurais-atualizadas, fornecida pelo professor Átila Barros."
+        },
+        {
+          label: "Usado em",
+          copy: "Filtros, contadores da home, tabela de resultados, identificação da escola, oferta educacional, endereço, telefone, coordenadas e minimapa."
+        }
+      ],
+      source: "Planilha escolas-rurais-atualizadas • professor Átila Barros • processamento e estruturação do projeto",
+      fullWidth: true
+    },
+    {
+      title: "Hierarquia territorial",
+      description: "Organiza a relação entre região, UF e município e ajuda a resolver os códigos oficiais usados nos cruzamentos com o IBGE.",
+      bullets: [
+        {
+          label: "Usado em",
+          copy: "Filtro dependente de região, filtro de UF, filtro de município e preparação dos cruzamentos territoriais."
+        }
+      ],
+      source: "IBGE • API de Localidades"
+    },
+    {
+      title: "Painel de alfabetização",
+      description: "Mostra as taxas de alfabetização do Brasil, da região, da UF e do município selecionado.",
+      bullets: [
+        {
+          label: "Usado em",
+          copy: "Painel de alfabetização da home e bloco de alfabetização dentro da ficha da escola."
+        }
+      ],
+      source: "IBGE • Censo Demográfico 2022 • Tabela 9543"
+    },
+    {
+      title: "Renda per capita",
+      description: "Apresenta o rendimento nominal médio mensal domiciliar per capita por território.",
+      bullets: [
+        {
+          label: "Usado em",
+          copy: "Card de renda per capita da home e contexto de renda dentro da ficha da escola."
+        }
+      ],
+      source: "IBGE • Censo Demográfico 2022 • Tabela 10295"
+    },
+    {
+      title: "Desigualdade educacional",
+      description: "Compara escolaridade atingida e anos médios de estudo entre Brasil, macrorregiões e estados.",
+      bullets: [
+        {
+          label: "Usado em",
+          copy: "Dashboard Escolaridade por território, no fim da página."
+        }
+      ],
+      source: "IBGE • Censo Demográfico 2022 • Tabelas 10061 e 10062"
+    },
+    {
+      title: "Dados complementares por escola",
+      description: "Amplia a ficha com matrículas por etapa e outros indicadores públicos de cada unidade escolar.",
+      bullets: [
+        {
+          label: "Usado em",
+          copy: "Matrículas por etapa e bloco de dados complementares dentro da ficha da escola."
+        },
+        {
+          label: "Como entra no projeto",
+          copy: "Os dados são sincronizados para um cache local que o projeto consome ao abrir a ficha da escola."
+        }
+      ],
+      source: "Cultura Educa • Censo Escolar da Educação Básica 2020 • cache local school-enrichment-cache.json"
+    },
+    {
+      title: "Mapa e localização",
+      description: "A posição mostrada no minimapa parte das coordenadas e do endereço cadastrados na base local do projeto.",
+      bullets: [
+        {
+          label: "Usado em",
+          copy: "Minimapa da ficha da escola e legenda de localização exibida abaixo do mapa."
+        }
+      ],
+      source: "Base local do projeto + Google Maps"
+    }
+  ];
+
+  return `
+    <article class="school-sheet school-sheet--sources">
+      <header class="school-sheet__header school-sheet__header--sources">
+        <div class="school-sheet__intro">
+          <p class="school-sheet__eyebrow">Fontes da base</p>
+          <h3 class="school-sheet__title" id="sourcesModalTitle">Origem dos dados exibidos no projeto</h3>
+          <p class="school-sheet__subtitle">
+            Este painel resume de onde vem cada conjunto de dados usado nos filtros, nos indicadores da home e na ficha de cada escola.
+          </p>
+        </div>
+      </header>
+
+      <section class="school-sheet__section">
+        <div class="school-sheet__section-head">
+          <h4>Como a base foi montada</h4>
+          <p>O projeto combina uma base local tratada por nós com dados oficiais do IBGE e com informações públicas complementares de cada escola.</p>
+        </div>
+
+        <div class="sources-sheet__callout">
+          <strong>escolas-rurais.json</strong> é o resultado do trabalho que fizemos em cima da planilha
+          <strong>escolas-rurais-atualizadas</strong>, fornecida pelo professor <strong>Átila Barros</strong>.
+          Foi a partir dessa planilha que organizamos os campos, padronizamos filtros e estruturamos os dados que aparecem na home e na ficha das escolas.
+        </div>
+      </section>
+
+      <section class="school-sheet__section">
+        <div class="school-sheet__section-head">
+          <h4>Mapa das fontes</h4>
+          <p>Cada bloco abaixo mostra qual base alimenta cada parte da experiência.</p>
+        </div>
+
+        <div class="sources-sheet__grid">
+          ${cards.map(renderDataSourceCard).join("")}
+        </div>
+      </section>
+    </article>
+  `;
+}
+
 function renderSchoolSheet(row) {
   const schoolName = text(get(row, "school")) || "Escola sem nome";
   const schoolLocation = buildSchoolLocationLabel(row) || "Localização não informada";
@@ -2607,6 +2765,13 @@ async function updateOpenSchoolModalIncome(rowId) {
   }
 }
 
+function syncModalBodyState() {
+  const hasVisibleModal = [els.schoolModal, els.sourcesModal]
+    .some(modal => modal?.classList.contains("is-visible"));
+
+  document.body.classList.toggle("modal-open", hasVisibleModal);
+}
+
 function openSchoolModalById(rowId) {
   const row = app.rawRows[rowId];
 
@@ -2622,7 +2787,7 @@ function openSchoolModalById(rowId) {
   els.schoolModalContent.innerHTML = renderSchoolSheet(row);
   els.schoolModal.classList.add("is-visible");
   els.schoolModal.setAttribute("aria-hidden", "false");
-  document.body.classList.add("modal-open");
+  syncModalBodyState();
   els.schoolModalPanel.focus();
   void updateOpenSchoolModalEnrichment(rowId);
   void updateOpenSchoolModalIncome(rowId);
@@ -2637,11 +2802,42 @@ function closeSchoolModal() {
   els.schoolModal.classList.remove("is-visible");
   els.schoolModal.setAttribute("aria-hidden", "true");
   els.schoolModalContent.innerHTML = "";
-  document.body.classList.remove("modal-open");
+  syncModalBodyState();
   app.activeSchoolId = null;
 
   if (app.lastFocusedElement && typeof app.lastFocusedElement.focus === "function") {
     app.lastFocusedElement.focus();
+  }
+}
+
+function openSourcesModal() {
+  if (!els.sourcesModal || !els.sourcesModalContent || !els.sourcesModalPanel) {
+    return;
+  }
+
+  if (!els.sourcesModal.classList.contains("is-visible")) {
+    app.lastSourcesFocusedElement = document.activeElement;
+  }
+
+  els.sourcesModalContent.innerHTML = renderDataSourcesSheet();
+  els.sourcesModal.classList.add("is-visible");
+  els.sourcesModal.setAttribute("aria-hidden", "false");
+  syncModalBodyState();
+  els.sourcesModalPanel.focus();
+}
+
+function closeSourcesModal() {
+  if (!els.sourcesModal || !els.sourcesModalContent) {
+    return;
+  }
+
+  els.sourcesModal.classList.remove("is-visible");
+  els.sourcesModal.setAttribute("aria-hidden", "true");
+  els.sourcesModalContent.innerHTML = "";
+  syncModalBodyState();
+
+  if (app.lastSourcesFocusedElement && typeof app.lastSourcesFocusedElement.focus === "function") {
+    app.lastSourcesFocusedElement.focus();
   }
 }
 
@@ -2663,8 +2859,30 @@ function handleSchoolModalClick(event) {
   closeSchoolModal();
 }
 
+function handleSourcesModalClick(event) {
+  if (!event.target.closest("[data-close-sources-modal]")) {
+    return;
+  }
+
+  closeSourcesModal();
+}
+
+function handleSourcesModalTrigger(event) {
+  event.preventDefault();
+  openSourcesModal();
+}
+
 function handleGlobalKeydown(event) {
-  if (event.key === "Escape" && els.schoolModal?.classList.contains("is-visible")) {
+  if (event.key !== "Escape") {
+    return;
+  }
+
+  if (els.sourcesModal?.classList.contains("is-visible")) {
+    closeSourcesModal();
+    return;
+  }
+
+  if (els.schoolModal?.classList.contains("is-visible")) {
     closeSchoolModal();
   }
 }
@@ -3048,7 +3266,9 @@ function bindEvents() {
   });
 
   els.tableWrap.addEventListener("click", handleTableInteractions);
+  els.openSourcesModal?.addEventListener("click", handleSourcesModalTrigger);
   els.schoolModal?.addEventListener("click", handleSchoolModalClick);
+  els.sourcesModal?.addEventListener("click", handleSourcesModalClick);
   document.addEventListener("keydown", handleGlobalKeydown);
   syncCityFilterOptions({ preserveSelection: false });
 }
