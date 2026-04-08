@@ -1,11 +1,3 @@
-{
-   "extensiondescription": {
-      "message": "Open Drive-bestanden rechtstreeks vanuit je browser in compatibele apps die op je computer zijn geïnstalleerd."
-   },
-   "extensionname": {
-      "message": "Application Launcher For Drive (by Google)"
-   },
-   "extensionshortname": {
-      "message": "Google Drive App Launcher"
-   }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:e33d66d515cb711e13efd32940ab44de9bb4dcd76599266da4b6e360647e0041
+size 337

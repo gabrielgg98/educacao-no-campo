@@ -1,11 +1,3 @@
-{
-   "extensiondescription": {
-      "message": "Åbn Drev-filer direkte i din browser via de kompatible programmer, du har installeret på din computer."
-   },
-   "extensionname": {
-      "message": "Appstarter til Drev (af Google)"
-   },
-   "extensionshortname": {
-      "message": "Google Drev-appstarter"
-   }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:86650064e9e4eddd87a2920ba7956c14a68c7bbf50d1ef04d2a45f6ee6795465
+size 316

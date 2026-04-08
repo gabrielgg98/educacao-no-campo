@@ -1,11 +1,3 @@
-{
-   "extensiondescription": {
-      "message": "使用電腦上安裝的相容應用程式直接開啟瀏覽器中的雲端硬碟檔案。"
-   },
-   "extensionname": {
-      "message": "雲端硬碟應用程式啟動器 (由 Google 提供)"
-   },
-   "extensionshortname": {
-      "message": "Google 雲端硬碟應用程式啟動器"
-   }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:a62b9eed0afaf72b538ab9c41d22747d13295cf8a417d38dc96aefd249ab4f49
+size 342

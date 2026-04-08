@@ -1,11 +1,3 @@
-{
-   "extensiondescription": {
-      "message": "Otwieraj pliki z Dysku bezpośrednio z poziomu przeglądarki w zgodnych aplikacjach zainstalowanych na komputerze."
-   },
-   "extensionname": {
-      "message": "Program uruchamiający aplikacje dla plików z Dysku (od Google)"
-   },
-   "extensionshortname": {
-      "message": "Program uruchamiający aplikacje dla plików z Dysku Google"
-   }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:90df6b0d1fac5bfddb1805a6976a0e3b68d8a99a3d2c0ddbffd78ea184b75231
+size 396

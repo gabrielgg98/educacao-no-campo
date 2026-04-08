@@ -1,11 +1,3 @@
-{
-   "extensiondescription": {
-      "message": "Ouvrez directement des fichiers Disque à partir de votre navigateur dans des applications compatibles installées sur votre ordinateur."
-   },
-   "extensionname": {
-      "message": "Lanceur d'applications pour Disque (par Google)"
-   },
-   "extensionshortname": {
-      "message": "Lanceur d'applications Google Disque"
-   }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:ae9a09c446d48cbe79465393bced4ebce6d682f75a537d19844b549db1660204
+size 378

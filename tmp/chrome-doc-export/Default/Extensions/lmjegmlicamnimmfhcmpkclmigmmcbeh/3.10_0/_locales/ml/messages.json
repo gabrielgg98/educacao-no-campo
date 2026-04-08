@@ -1,11 +1,3 @@
-{
-   "extensiondescription": {
-      "message": "നിങ്ങളുടെ കമ്പ്യൂട്ടറിൽ ഇൻസ്‌റ്റാൾ ചെയ്‌ത അനുയോജ്യമായ ആപ്പുകളിലൂടെ Drive ഫയലുകൾ ബ്രൗസറിൽ നിന്ന് നേരിട്ട് തുറക്കുക."
-   },
-   "extensionname": {
-      "message": "Drive-നുള്ള ആപ്പ് ലോഞ്ചർ (Google-ൽ നിന്ന്)"
-   },
-   "extensionshortname": {
-      "message": "Google Drive ആപ്പ് ലോഞ്ചർ"
-   }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:194ef6c233ceb53215b6119d77601e30d701c0290bc7567afeffc97a956167f6
+size 602

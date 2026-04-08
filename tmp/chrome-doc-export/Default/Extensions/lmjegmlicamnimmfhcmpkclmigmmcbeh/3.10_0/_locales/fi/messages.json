@@ -1,11 +1,3 @@
-{
-   "extensiondescription": {
-      "message": "Avaa Drive-tiedostot suoraan selaimelta tietokoneellasi olevaan yhteensopivaan sovellukseen."
-   },
-   "extensionname": {
-      "message": "Application Launcher For Drive (by Google)"
-   },
-   "extensionshortname": {
-      "message": "Google Drive App Launcher"
-   }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:22f0663f3d30313bcea14cd27ae3fdafb81bb9189edfc3eda82168c81f27b269
+size 318

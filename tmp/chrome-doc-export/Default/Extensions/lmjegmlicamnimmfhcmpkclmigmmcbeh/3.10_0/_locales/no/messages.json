@@ -1,11 +1,3 @@
-{
-   "extensiondescription": {
-      "message": "Åpne Disk-filer direkte fra nettleseren din i kompatible programmer som er installert på datamaskinen."
-   },
-   "extensionname": {
-      "message": "Application Launcher For Drive (by Google)"
-   },
-   "extensionshortname": {
-      "message": "Google Drive App Launcher"
-   }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:1dd8f9d0b21b970c7b0570ad4fabe45fa48c70c0b7d971800a1855777da3b50d
+size 330

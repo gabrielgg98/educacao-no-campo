@@ -1,11 +1,3 @@
-{
-   "extensiondescription": {
-      "message": "Bilgisayarınızda yüklü uyumlu uygulamalarda Drive dosyalarını doğrudan tarayıcınızdan açın."
-   },
-   "extensionname": {
-      "message": "Application Launcher For Drive (by Google)"
-   },
-   "extensionshortname": {
-      "message": "Google Drive Uygulama Başlatıcı"
-   }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:3b4868709823ac8720aa58b44f4a65972187a617c0ef40d9b42dfa58be5be6a4
+size 338

@@ -1,11 +1,3 @@
-{
-   "extensiondescription": {
-      "message": "कंप्यूटर पर इंस्टॉल किए गए काम करने वाले ऐप्लिकेशन के साथ, अपने ब्राउज़र से सीधे तौर पर Drive फ़ाइलें खोलें."
-   },
-   "extensionname": {
-      "message": "Application Launcher For Drive (by Google)"
-   },
-   "extensionshortname": {
-      "message": "Google Drive ऐप्लिकेशन लॉन्चर"
-   }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:d90da58a1828345c62677adac6bee83521958ae3c738b24e88257884060d764a
+size 529

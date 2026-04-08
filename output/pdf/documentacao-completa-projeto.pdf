@@ -1,0 +1,771 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Count 17 /Kids [5 0 R 7 0 R 9 0 R 11 0 R 13 0 R 15 0 R 17 0 R 19 0 R 21 0 R 23 0 R 25 0 R 27 0 R 29 0 R 31 0 R 33 0 R 35 0 R 37 0 R] >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier /Encoding /WinAnsiEncoding >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier-Bold /Encoding /WinAnsiEncoding >>
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 6 0 R >>
+endobj
+6 0 obj
+<< /Length 3092 >>
+stream
+BT /F1 10.5 Tf 1 0 0 1 52.00 783.89 Tm (Documentação técnica e didática) Tj ET
+BT /F2 22 Tf 1 0 0 1 52.00 760.89 Tm (Projeto Educação no Campo) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 718.89 Tm (Este documento foi escrito para uma pessoa iniciante. O objetivo é permitir) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 703.89 Tm (que você leia com calma, entenda a estrutura do projeto, saiba onde cada) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 688.89 Tm (parte mora, compreenda por que certas decisões foram tomadas e tenha) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 673.89 Tm (segurança para fazer manutenção e novas implementações.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 650.89 Tm (Projeto Mapa interativo de escolas rurais com filtros, indicadores e ficha) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 635.89 Tm (detalhada) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 612.89 Tm (Tecnologias HTML, CSS, JavaScript puro, JSON local, APIs do IBGE e cache) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 597.89 Tm (complementar) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 574.89 Tm (Perfil do material Didático, detalhado e orientado para manutenção futura) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 551.89 Tm (Resumo em uma frase: este projeto carrega uma base local de escolas rurais,) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 536.89 Tm (organiza filtros encadeados por território, renderiza resultados e fichas) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 521.89 Tm (detalhadas, e cruza essa base com dados externos do IBGE e com um cache) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 506.89 Tm (complementar por escola.) Tj ET
+BT /F2 17 Tf 1 0 0 1 52.00 465.89 Tm (Sumário) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 435.89 Tm (- Visão geral do projeto) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 418.89 Tm (- Como estudar este código sem se perder) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 401.89 Tm (- Mapa dos arquivos) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 384.89 Tm (- Fluxo geral da aplicação) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 367.89 Tm (- Anatomia do HTML) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 350.89 Tm (- Anatomia do CSS) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 333.89 Tm (- Arquitetura do JavaScript) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 316.89 Tm (- Modelo de dados local) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 299.89 Tm (- Sistema de filtros) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 282.89 Tm (- Busca, paginação e tabela) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 265.89 Tm (- Painéis e indicadores externos) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 248.89 Tm (- Ficha da escola e modais) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 231.89 Tm (- Cache complementar do Cultura Educa) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 214.89 Tm (- Receitas de manutenção) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 197.89 Tm (- Checklist de depuração) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 180.89 Tm (- Dívidas técnicas e pontos de atenção) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 163.89 Tm (- Glossário para iniciantes) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 146.89 Tm (- Como regenerar o PDF) Tj ET
+BT /F2 17 Tf 1 0 0 1 52.00 111.89 Tm (1. Visão geral do projeto) Tj ET
+BT /F1 9 Tf 1 0 0 1 52.00 26.00 Tm (Documenta????o do projeto Educa????o no Campo - P??gina 1 de 17) Tj ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 8 0 R >>
+endobj
+8 0 obj
+<< /Length 3814 >>
+stream
+BT /F1 10.5 Tf 1 0 0 1 52.00 783.89 Tm (O projeto é uma interface de consulta sobre escolas rurais do Brasil. Na) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 768.89 Tm (prática, ele faz três coisas ao mesmo tempo:) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 745.89 Tm (- carrega uma base principal local com dezenas de milhares de escolas;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 728.89 Tm (- permite filtrar, buscar, paginar e abrir fichas detalhadas de cada escola;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 711.89 Tm (- enriquece a leitura com indicadores externos do IBGE e com um cache) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 696.89 Tm (complementar por escola.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 679.89 Tm (Isso significa que o projeto não é apenas uma página estática. Ele é uma) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 664.89 Tm (pequena aplicação front-end, toda escrita em JavaScript puro, com estado) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 649.89 Tm (global, renderização dinâmica, integrações assíncronas e comportamento) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 634.89 Tm (responsivo para desktop e mobile.) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 597.89 Tm (Camada 1 - Base local) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 573.89 Tm (O arquivo `escolas-rurais.json` é a espinha dorsal do sistema. Ele alimenta) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 558.89 Tm (os filtros, os contadores, a tabela de resultados e a maior parte da ficha da) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 543.89 Tm (escola.) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 506.89 Tm (Camada 2 - Indicadores territoriais) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 482.89 Tm (O projeto consulta APIs do IBGE para buscar alfabetização, renda per capita,) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 467.89 Tm (escolaridade por território e os metadados oficiais de estados e municípios.) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 430.89 Tm (Camada 3 - Enriquecimento por escola) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 406.89 Tm (O arquivo `school-enrichment-cache.json` guarda uma camada extra derivada de) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 391.89 Tm (uma ficha pública por escola. Esse cache é consumido pela ficha do modal.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 368.89 Tm (Ponto central) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 345.89 Tm (A ideia arquitetural mais importante do projeto é esta: a base local controla) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 330.89 Tm (a navegação principal, e as fontes externas entram como enriquecimento) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 315.89 Tm (progressivo. Isso deixa a interface rápida para abrir, mesmo quando algumas) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 300.89 Tm (integrações demoram ou falham.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 277.89 Tm (Origem da base local) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 254.89 Tm (O arquivo `escolas-rurais.json` não surgiu do nada. Ele é o resultado do) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 239.89 Tm (trabalho de estruturação feito em cima da planilha) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 224.89 Tm (`escolas-rurais-atualizadas`, fornecida pelo professor Átila Barros. Em) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 209.89 Tm (outras palavras: a planilha foi a matéria-prima e o JSON foi a forma final) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 194.89 Tm (preparada para a aplicação.) Tj ET
+BT /F2 17 Tf 1 0 0 1 52.00 153.89 Tm (2. Como estudar este código sem se perder) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 123.89 Tm (Quem está começando costuma tentar entender tudo de uma vez. Isso gera) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 108.89 Tm (ansiedade e confusão. Neste projeto, a melhor estratégia é seguir uma ordem) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 93.89 Tm (de leitura.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 70.89 Tm (- Abra index.html e veja apenas a estrutura da página.) Tj ET
+BT /F1 9 Tf 1 0 0 1 52.00 26.00 Tm (Documenta????o do projeto Educa????o no Campo - P??gina 2 de 17) Tj ET
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 10 0 R >>
+endobj
+10 0 obj
+<< /Length 3836 >>
+stream
+BT /F1 10.5 Tf 1 0 0 1 66.00 783.89 Tm (- Depois leia style.css só para identificar os grandes blocos visuais.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 766.89 Tm (- Em script.js, comece pelo topo: constantes, objeto app e objeto els.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 749.89 Tm (- Em seguida, leia o ciclo principal: bindEvents\(\), loadLocalData\(\),) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 734.89 Tm (applyFilters\(\), renderTable\(\).) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 717.89 Tm (- Só depois disso avance para os painéis do IBGE e para a ficha da escola.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 700.89 Tm (Regra prática) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 677.89 Tm (Quando olhar para uma função, faça sempre estas três perguntas:) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 654.89 Tm (- de onde ela recebe informação;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 637.89 Tm (- o que ela transforma;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 620.89 Tm (- qual parte da tela ela atualiza.) Tj ET
+BT /F2 17 Tf 1 0 0 1 52.00 585.89 Tm (3. Mapa dos arquivos) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 555.89 Tm (O projeto principal está concentrado em poucos arquivos. Isso tem a vantagem) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 540.89 Tm (de ser fácil de abrir e a desvantagem de concentrar muita responsabilidade em) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 525.89 Tm (um único `script.js`.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 502.89 Tm (Arquivo Papel O que você costuma editar aqui) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 479.89 Tm (`index.html` Estrutura da página, filtros, cards, áreas de resultado e) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 464.89 Tm (containers dos modais. Adicionar novas seções, novos botões, novos elementos) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 449.89 Tm (que depois serão controlados pelo JS.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 426.89 Tm (`style.css` Visual da home, tabela, dashboard, modais, ficha da escola,) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 411.89 Tm (responsividade e impressão visual. Ajustar layout, tipografia, espaçamento,) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 396.89 Tm (responsividade e estados visuais.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 373.89 Tm (`script.js` Lógica da aplicação: estado global, fetch, filtros, renderização,) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 358.89 Tm (integração com APIs e modais. Quase toda manutenção funcional do projeto.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 335.89 Tm (`escolas-rurais.json` Base local principal das escolas. Normalmente você não) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 320.89 Tm (edita na mão. O ideal é regenerar a partir da planilha fonte.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 297.89 Tm (`school-enrichment-cache.json` Cache complementar por código INEP, usado na) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 282.89 Tm (ficha da escola. Atualizar via script, não manualmente.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 259.89 Tm (`scripts/build-school-enrichment.mjs` Script que lê a ficha pública externa e) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 244.89 Tm (gera o cache complementar local. Corrigir parser, adicionar novos campos ou) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 229.89 Tm (filtrar dados inadequados.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 206.89 Tm (Importante) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 183.89 Tm (O projeto roda só com front-end e arquivos locais. Isso é ótimo para) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 168.89 Tm (simplicidade, mas significa que parte das integrações depende de o navegador) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 153.89 Tm (permitir requisições e de o arquivo ser aberto em contexto compatível. Por) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 138.89 Tm (isso existe fallback com `XMLHttpRequest` no carregamento da base local.) Tj ET
+BT /F2 17 Tf 1 0 0 1 52.00 97.89 Tm (4. Fluxo geral da aplicação) Tj ET
+BT /F1 9 Tf 1 0 0 1 52.00 26.00 Tm (Documenta????o do projeto Educa????o no Campo - P??gina 3 de 17) Tj ET
+endstream
+endobj
+11 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 12 0 R >>
+endobj
+12 0 obj
+<< /Length 3803 >>
+stream
+BT /F1 10.5 Tf 1 0 0 1 52.00 783.89 Tm (Antes de entrar em cada arquivo, vale visualizar o ciclo completo. Este é o) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 768.89 Tm (fluxo real da aplicação:) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 745.89 Tm (1. O navegador abre index.html 2. O HTML carrega style.css e script.js 3. O) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 730.89 Tm (script cria constantes, estado global e referências DOM 4. bindEvents\(\)) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 715.89 Tm (registra os eventos de clique, change, keydown e input 5. loadLocalData\(\)) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 700.89 Tm (carrega escolas-rurais.json 6. detectColumns\(\) descobre quais colunas do JSON) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 685.89 Tm (correspondem a cada campo lógico 7. buildFilters\(\) preenche os selects 8.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 670.89 Tm (applyFilters\(\) gera app.filteredRows 9. renderStats\(\) e renderTable\(\)) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 655.89 Tm (desenham a tela principal 10. updateLiteracyPanel\(\), updateIncomePanel\(\) e) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 640.89 Tm (updateEducationDashboard\(\) consultam o IBGE 11. Ao clicar numa linha,) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 625.89 Tm (openSchoolModalById\(\) monta a ficha da escola 12. A ficha carrega) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 610.89 Tm (complementos: enriquecimento local, renda e alfabetização) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 587.89 Tm (Repare que o fluxo é incremental. A home funciona primeiro com a base local.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 572.89 Tm (Depois, em paralelo, os indicadores externos completam a experiência. Isso) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 557.89 Tm (evita que a tela fique inutilizável enquanto uma API externa responde.) Tj ET
+BT /F2 17 Tf 1 0 0 1 52.00 516.89 Tm (5. Anatomia do HTML) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 486.89 Tm (O `index.html` é curto e organizado por seções. Isso é bom porque separa bem) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 471.89 Tm (os containers visuais. O HTML não tenta fazer lógica. Ele apenas cria) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 456.89 Tm ("lugares" para o JavaScript preencher.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 433.89 Tm (Trecho Função) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 410.89 Tm (`.hero` | Faixa superior com a marca.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 387.89 Tm (`.filters-bar` | Área dos filtros e da busca.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 364.89 Tm (`.stats` | Conjunto de cards-resumo da home.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 341.89 Tm (`.literacy-panel` | Painel de alfabetização.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 318.89 Tm (`.results-card` | Resumo de resultados, paginação e tabela/lista.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 295.89 Tm (`.education-dashboard` | Dashboard comparativo de escolaridade por) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 280.89 Tm (território.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 257.89 Tm (`#schoolModal` | Container do modal principal da ficha da escola.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 234.89 Tm (`#sourcesModal` | Container do modal de fontes da base de dados.) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 197.89 Tm (5.1 Por que quase tudo tem id?) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 173.89 Tm (Porque o JavaScript precisa encontrar esses elementos rapidamente com) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 158.89 Tm (`document.getElementById\(\)`. Esse padrão aparece no objeto `els`. A lógica é) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 143.89 Tm (simples: o HTML define o ponto de montagem, e o JS centraliza as referências) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 128.89 Tm (a esses pontos num único lugar.) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 91.89 Tm (5.2 O HTML já vem com dados prontos?) Tj ET
+BT /F1 9 Tf 1 0 0 1 52.00 26.00 Tm (Documenta????o do projeto Educa????o no Campo - P??gina 4 de 17) Tj ET
+endstream
+endobj
+13 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 14 0 R >>
+endobj
+14 0 obj
+<< /Length 3060 >>
+stream
+BT /F1 10.5 Tf 1 0 0 1 52.00 783.89 Tm (Não. A maior parte do conteúdo dinâmico começa com textos como) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 768.89 Tm ("Carregando..." ou containers vazios. Isso é intencional. Depois que os dados) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 753.89 Tm (chegam, o JavaScript substitui o conteúdo.) Tj ET
+BT /F2 17 Tf 1 0 0 1 52.00 712.89 Tm (6. Anatomia do CSS) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 682.89 Tm (O `style.css` concentra todo o comportamento visual. Ele não está separado) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 667.89 Tm (por comentários grandes, então a melhor maneira de lê-lo é por blocos de) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 652.89 Tm (classe.) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 615.89 Tm (Parte 1 - Base visual) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 591.89 Tm (No topo do arquivo ficam as variáveis CSS em `:root`, as regras globais, o) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 576.89 Tm (fundo geral, o padrão dos cards e os estilos de formulário.) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 539.89 Tm (Parte 2 - Home) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 515.89 Tm (Depois vêm filtros, stats, painéis, tabela e dashboard. Essa parte define) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 500.89 Tm (praticamente toda a home.) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 463.89 Tm (Parte 3 - Ficha da escola) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 439.89 Tm (Mais adiante aparecem as classes do modal, da estrutura interna da ficha, do) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 424.89 Tm (mapa e dos blocos complementares.) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 387.89 Tm (Parte 4 - Responsividade) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 363.89 Tm (No final estão os media queries para desktop menor, tablet, smartphone e) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 348.89 Tm (ajustes específicos do modo mobile.) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 311.89 Tm (6.1 Decisão importante: lista mobile em vez de tabela) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 293.89 Tm (completa) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 269.89 Tm (No desktop, a área de resultados é uma tabela com várias colunas. No mobile,) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 254.89 Tm (isso foi transformado numa lista em que apenas a coluna da escola permanece) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 239.89 Tm (visível. Essa decisão reduz ruído e faz sentido para toque: no celular a) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 224.89 Tm (pessoa toca no nome e abre a ficha para ver o restante.) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 187.89 Tm (6.2 Onde mexer quando o layout quebra) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 163.89 Tm (- procure a classe visual do bloco em si;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 146.89 Tm (- depois procure o media query que altera esse bloco;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 129.89 Tm (- veja se existe alguma regra com max-width, grid-template-columns ou display) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 114.89 Tm (alterando o comportamento.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 97.89 Tm (Regra prática) Tj ET
+BT /F1 9 Tf 1 0 0 1 52.00 26.00 Tm (Documenta????o do projeto Educa????o no Campo - P??gina 5 de 17) Tj ET
+endstream
+endobj
+15 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 16 0 R >>
+endobj
+16 0 obj
+<< /Length 3599 >>
+stream
+BT /F1 10.5 Tf 1 0 0 1 52.00 783.89 Tm (Em problemas de layout deste projeto, os culpados mais comuns são:) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 768.89 Tm (`max-width`, `grid-column`, `white-space`, `word-break` e regras diferentes) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 753.89 Tm (dentro dos media queries.) Tj ET
+BT /F2 17 Tf 1 0 0 1 52.00 712.89 Tm (7. Arquitetura do JavaScript) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 682.89 Tm (O `script.js` é o coração da aplicação. Ele é grande e faz muita coisa, então) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 667.89 Tm (o jeito certo de entendê-lo é dividi-lo mentalmente em camadas.) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 630.89 Tm (7.1 Camada de configuração) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 606.89 Tm (No topo do arquivo ficam constantes como `DATA_URL`, IDs de tabelas do SIDRA,) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 591.89 Tm (nomes de fonte, chaves de filtros e a definição das colunas da tabela) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 576.89 Tm (principal. Essa parte responde à pergunta: "quais dados o sistema conhece?".) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 539.89 Tm (7.2 Camada de estado global) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 515.89 Tm (O objeto `app` é o estado global do projeto. Ele guarda:) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 492.89 Tm (- rawRows: todas as linhas da base principal;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 475.89 Tm (- filteredRows: linhas depois da aplicação dos filtros;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 458.89 Tm (- columns: mapeamento entre campo lógico e nome real da coluna do JSON;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 441.89 Tm (- estado de paginação;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 424.89 Tm (- estado dos modais;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 407.89 Tm (- caches de alfabetização, renda, escolaridade e enriquecimento por escola.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 390.89 Tm (Conceito importante) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 367.89 Tm (Quando falamos que um dado é "global" neste projeto, normalmente estamos) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 352.89 Tm (dizendo que ele fica dentro do objeto `app` e pode ser reutilizado por várias) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 337.89 Tm (funções. Esse foi justamente o mecanismo escolhido para resolver a) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 322.89 Tm (necessidade de compartilhar dados do `fetch` com o resto da aplicação.) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 285.89 Tm (7.3 Camada de referências DOM) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 261.89 Tm (O objeto `els` centraliza as referências aos elementos do HTML. Isso evita) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 246.89 Tm (ficar repetindo `document.getElementById\(\)` pelo arquivo inteiro e deixa mais) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 231.89 Tm (claro quais nós da interface existem.) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 194.89 Tm (7.4 Camada utilitária) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 170.89 Tm (Funções como `normalize\(\)`, `text\(\)`, `escapeHtml\(\)` e `renderValue\(\)` fazem) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 155.89 Tm (pequenos tratamentos que são reutilizados o tempo todo. Elas resolvem) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 140.89 Tm (problemas clássicos:) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 117.89 Tm (- comparar texto sem acento e sem diferença entre maiúsculas e minúsculas;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 100.89 Tm (- garantir que valores null ou vazios não quebrem a interface;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 83.89 Tm (- evitar injeção de HTML ao montar strings para innerHTML.) Tj ET
+BT /F1 9 Tf 1 0 0 1 52.00 26.00 Tm (Documenta????o do projeto Educa????o no Campo - P??gina 6 de 17) Tj ET
+endstream
+endobj
+17 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 18 0 R >>
+endobj
+18 0 obj
+<< /Length 3856 >>
+stream
+BT /F2 13.5 Tf 1 0 0 1 52.00 769.89 Tm (7.5 Camada de acesso ao dado local) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 745.89 Tm (Aqui entram `detectColumn\(\)`, `detectColumns\(\)` e `get\(\)`.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 722.89 Tm (A função `detectColumns\(\)` olha o cabeçalho real do JSON e tenta descobrir) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 707.89 Tm (qual coluna corresponde a cada campo lógico do sistema. Isso é muito útil) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 692.89 Tm (quando a planilha de origem muda ligeiramente de nome, por exemplo) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 677.89 Tm ("Município" versus "Municipio".) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 654.89 Tm (Depois que esse mapeamento é criado, a função `get\(row, key\)` permite acessar) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 639.89 Tm (um campo por nome lógico, sem que o resto do projeto precise saber qual era o) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 624.89 Tm (texto exato da coluna original.) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 587.89 Tm (7.6 Mapa das funções mais importantes) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 563.89 Tm (Função Responsabilidade Quando você costuma mexer nela) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 540.89 Tm (`loadLocalData\(\)` Carrega a base local e dispara a inicialização real da) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 525.89 Tm (aplicação. Quando muda a origem da base ou a forma de carregamento.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 502.89 Tm (`buildFilters\(\)` Preenche os filtros com base nos dados disponíveis. Quando) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 487.89 Tm (entra um novo filtro ou uma nova ordenação.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 464.89 Tm (`applyFilters\(\)` Aplica busca e filtros sobre a base completa. Quando a) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 449.89 Tm (lógica de filtragem muda.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 426.89 Tm (`renderTable\(\)` Desenha a tabela ou lista de resultados. Quando a home muda) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 411.89 Tm (de layout ou colunas.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 388.89 Tm (`renderSchoolSheet\(\)` Monta a ficha completa da escola. Quando você quer) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 373.89 Tm (incluir, remover ou reorganizar blocos do modal.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 350.89 Tm (`ensureBaseLiteracyLoaded\(\)` Busca o núcleo de alfabetização no IBGE. Quando) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 335.89 Tm (muda a tabela, o ano ou o recorte.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 312.89 Tm (`ensureBaseIncomeLoaded\(\)` Busca o núcleo de renda per capita no IBGE. Quando) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 297.89 Tm (muda a variável de renda ou o recorte territorial.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 274.89 Tm (`ensureEducationDashboardLoaded\(\)` Carrega os perfis do dashboard de) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 259.89 Tm (escolaridade. Quando o painel de desigualdade educacional evolui.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 236.89 Tm (`updateOpenSchoolModalEnrichment\(\)` Atualiza a parte complementar da ficha) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 221.89 Tm (depois que o modal abre. Quando o cache complementar muda de formato.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 198.89 Tm (`bindEvents\(\)` Conecta a interface às funções do sistema. Quando surge um) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 183.89 Tm (novo botão, filtro ou gesto de interação.) Tj ET
+BT /F2 17 Tf 1 0 0 1 52.00 142.89 Tm (8. Modelo de dados local) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 112.89 Tm (A base principal do projeto é o arquivo `escolas-rurais.json`. O código não) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 97.89 Tm (acessa esse JSON diretamente pelo nome cru das colunas. Em vez disso, ele) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 82.89 Tm (mapeia os campos esperados e depois trabalha com chaves lógicas.) Tj ET
+BT /F1 9 Tf 1 0 0 1 52.00 26.00 Tm (Documenta????o do projeto Educa????o no Campo - P??gina 7 de 17) Tj ET
+endstream
+endobj
+19 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 20 0 R >>
+endobj
+20 0 obj
+<< /Length 3247 >>
+stream
+BT /F2 13.5 Tf 1 0 0 1 52.00 769.89 Tm (8.1 Campos principais esperados) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 745.89 Tm (Chave lógica Significado Onde aparece) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 722.89 Tm (`school` | Nome da escola | Tabela, busca, ficha do modal) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 699.89 Tm (`inep` | Código INEP | Tabela e identificação da ficha) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 676.89 Tm (`uf` | Sigla do estado | Filtros, territorialização, fichas e cruzamentos) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 661.89 Tm (IBGE) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 638.89 Tm (`city` | Município | Filtros, tabela, indicadores municipais) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 615.89 Tm (`dependency` | Dependência administrativa | Filtro "Categoria" e tags da) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 600.89 Tm (ficha) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 577.89 Tm (`differentiatedLocation` | Área diferenciada | Filtro "Área" e ficha) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 554.89 Tm (`councilRegulation` | Status no conselho | Filtro "Status", tags e ficha) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 531.89 Tm (`schoolSize` | Porte da escola | Filtro "Porte", tabela e ficha) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 508.89 Tm (`stages` | Etapas e modalidades | Filtro "Modalidade", tabela e ficha) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 485.89 Tm (`address`, `phone`, `latitude`, `longitude` | Dados de localização e contato) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 470.89 Tm (| Ficha da escola e minimapa) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 433.89 Tm (8.2 O que é um campo derivado) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 409.89 Tm (Um campo derivado é um campo que não existe de forma explícita no JSON, mas) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 394.89 Tm (pode ser calculado a partir de outro. O melhor exemplo aqui é a `região`. O) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 379.89 Tm (JSON traz a UF. A região é obtida consultando o objeto `regioesPorUF`.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 356.89 Tm (É por isso que o filtro de região não depende de uma coluna real da planilha.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 341.89 Tm (Ele depende da função `getFilterValue\(\)`.) Tj ET
+BT /F2 17 Tf 1 0 0 1 52.00 300.89 Tm (9. Sistema de filtros) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 270.89 Tm (O sistema de filtros é uma das partes mais importantes do projeto. Ele foi) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 255.89 Tm (desenhado para ter um núcleo genérico, mas também aceita exceções, como) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 240.89 Tm (filtros derivados.) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 203.89 Tm (9.1 Estrutura-base dos filtros) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 179.89 Tm (O array `FILTER_SELECTS` lista os filtros do tipo `select`. Cada item) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 164.89 Tm (informa:) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 141.89 Tm (- qual elemento do DOM representa o filtro;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 124.89 Tm (- qual chave lógica do dado ele filtra;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 107.89 Tm (- qual rótulo deve aparecer quando nada foi selecionado.) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 76.89 Tm (9.2 Filtros que se montam automaticamente) Tj ET
+BT /F1 9 Tf 1 0 0 1 52.00 26.00 Tm (Documenta????o do projeto Educa????o no Campo - P??gina 8 de 17) Tj ET
+endstream
+endobj
+21 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 22 0 R >>
+endobj
+22 0 obj
+<< /Length 3406 >>
+stream
+BT /F1 10.5 Tf 1 0 0 1 52.00 783.89 Tm (A função `buildFilters\(\)` percorre esse array e preenche os selects com) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 768.89 Tm (valores únicos extraídos da base. Essa é a razão pela qual adicionar um) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 753.89 Tm (filtro simples é relativamente barato: se o campo já existe no JSON, o) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 738.89 Tm (próprio sistema consegue montar as opções.) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 701.89 Tm (9.3 Filtro derivado de região) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 677.89 Tm (A região não vem pronta na base. Então o projeto usa `getFilterValue\(row,) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 662.89 Tm (key\)`. Se a chave pedida for `region`, a função consulta `getRegionByUf\(\)` em) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 647.89 Tm (vez de procurar uma coluna.) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 610.89 Tm (9.4 Encadeamento entre região, UF e município) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 586.89 Tm (- Ao escolher uma região, o filtro de UF é reconstruído para exibir apenas) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 571.89 Tm (estados daquela região.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 554.89 Tm (- Ao escolher uma UF, o filtro de região é sincronizado automaticamente e o) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 539.89 Tm (filtro de município é reconstruído com as cidades daquela UF.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 522.89 Tm (- Ao tentar abrir município sem UF, a interface bloqueia e mostra um aviso) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 507.89 Tm (leve.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 490.89 Tm (Região muda -> limpa UF -> limpa Município -> syncUfFilterOptions\(\) ->) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 475.89 Tm (syncCityFilterOptions\(\) -> applyFilters\(\)) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 452.89 Tm (UF muda -> sincroniza Região -> syncUfFilterOptions\(\) ->) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 437.89 Tm (syncCityFilterOptions\(\) -> applyFilters\(\)) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 400.89 Tm (9.5 Busca por texto) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 376.89 Tm (A busca por nome é combinada com os filtros. Isso quer dizer que a aplicação) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 361.89 Tm (não escolhe entre "buscar" ou "filtrar". Ela faz as duas coisas juntas dentro) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 346.89 Tm (de `applyFilters\(\)`.) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 309.89 Tm (9.6 Por que existe debounce\(\)?) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 285.89 Tm (Porque, sem ele, cada letra digitada dispararia imediatamente uma filtragem) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 270.89 Tm (completa sobre a base inteira. O `debounce` espera alguns milissegundos após) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 255.89 Tm (a digitação parar. Isso melhora a experiência.) Tj ET
+BT /F2 17 Tf 1 0 0 1 52.00 214.89 Tm (10. Busca, paginação e tabela) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 184.89 Tm (A sequência principal da home é esta:) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 161.89 Tm (- applyFilters\(\) recalcula app.filteredRows;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 144.89 Tm (- refreshResults\(\) chama renderStats\(\) e renderTable\(\);) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 127.89 Tm (- renderTable\(\) monta a tabela atual com base na página visível.) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 96.89 Tm (10.1 Paginação) Tj ET
+BT /F1 9 Tf 1 0 0 1 52.00 26.00 Tm (Documenta????o do projeto Educa????o no Campo - P??gina 9 de 17) Tj ET
+endstream
+endobj
+23 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 24 0 R >>
+endobj
+24 0 obj
+<< /Length 3358 >>
+stream
+BT /F1 10.5 Tf 1 0 0 1 52.00 783.89 Tm (A paginação é simples e eficiente. O sistema não pede novas páginas ao) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 768.89 Tm (servidor. Ele já tem tudo em memória e só calcula um recorte da lista) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 753.89 Tm (filtrada:) Tj ET
+BT /F1 9 Tf 1 0 0 1 64.00 726.89 Tm (const startIndex = \(app.currentPage - 1\) * app.pageSize;) Tj ET
+BT /F1 9 Tf 1 0 0 1 64.00 713.89 Tm (const endIndex = Math.min\(startIndex + app.pageSize, app.filteredRows.length\);) Tj ET
+BT /F1 9 Tf 1 0 0 1 64.00 700.89 Tm (const visibleRows = app.filteredRows.slice\(startIndex, endIndex\);) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 679.89 Tm (Isso é bom porque a base é local. Não existe paginação remota aqui.) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 642.89 Tm (10.2 A tabela é realmente clicável por linha) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 618.89 Tm (Em vez de colocar links espalhados, o projeto marca cada linha com) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 603.89 Tm (`data-school-id` e usa delegação de evento. Isso permite abrir a ficha) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 588.89 Tm (clicando em qualquer ponto da linha.) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 551.89 Tm (10.3 Desktop e mobile têm duas leituras diferentes) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 527.89 Tm (No desktop, a tabela aparece com várias colunas. No mobile, quase todas as) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 512.89 Tm (células são escondidas e fica visível apenas a célula da escola, transformada) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 497.89 Tm (em um cartão enxuto. Esse é um bom exemplo de responsividade orientada à) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 482.89 Tm (tarefa, não apenas à largura.) Tj ET
+BT /F2 17 Tf 1 0 0 1 52.00 441.89 Tm (11. Painéis e indicadores externos) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 411.89 Tm (O projeto consome APIs do IBGE em três frentes distintas:) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 388.89 Tm (- alfabetização;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 371.89 Tm (- renda per capita;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 354.89 Tm (- dashboard de escolaridade por território.) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 323.89 Tm (11.1 Duas APIs diferentes do IBGE) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 299.89 Tm (API | Papel no projeto) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 276.89 Tm (IBGE Localidades | Resolver estados, regiões e municípios oficiais, com seus) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 261.89 Tm (códigos.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 238.89 Tm (SIDRA | Trazer os indicadores estatísticos em si.) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 201.89 Tm (11.2 Por que o projeto guarda caches em Map) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 177.89 Tm (Porque alguns indicadores são consultados por território várias vezes. Se) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 162.89 Tm (cada mudança de filtro disparasse tudo do zero, a interface ficaria lenta e) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 147.89 Tm (faria requisições repetidas sem necessidade.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 124.89 Tm (Por isso o estado global guarda, por exemplo:) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 101.89 Tm (- app.literacy.regionRates e app.literacy.stateRates;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 84.89 Tm (- app.income.regionValues e app.income.stateValues;) Tj ET
+BT /F1 9 Tf 1 0 0 1 52.00 26.00 Tm (Documenta????o do projeto Educa????o no Campo - P??gina 10 de 17) Tj ET
+endstream
+endobj
+25 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 26 0 R >>
+endobj
+26 0 obj
+<< /Length 3380 >>
+stream
+BT /F1 10.5 Tf 1 0 0 1 66.00 783.89 Tm (- municipalityCatalogByUf e municipalityValuesByUf;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 766.89 Tm (- promises pendentes para evitar requisições duplicadas.) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 735.89 Tm (11.3 Painel de alfabetização) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 711.89 Tm (A função `ensureBaseLiteracyLoaded\(\)` carrega Brasil, regiões e estados.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 696.89 Tm (Quando há uma UF selecionada, `ensureMunicipalityLiteracyByUf\(\)` completa os) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 681.89 Tm (dados dos municípios daquela UF.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 658.89 Tm (Depois disso, `buildLiteracySnapshot\(\)` monta um retrato do contexto atual, e) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 643.89 Tm (`createLiteracyMetrics\(\)` transforma esse retrato em cards renderizáveis.) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 606.89 Tm (11.4 Card de renda per capita) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 582.89 Tm (A renda per capita da home mostra o recorte mais relevante do momento:) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 559.89 Tm (- sem território selecionado: Brasil;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 542.89 Tm (- com região selecionada: região;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 525.89 Tm (- com UF selecionada: UF;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 508.89 Tm (- com município selecionado: ainda usa a UF, porque esse foi o recorte) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 493.89 Tm (definido para a home.) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 462.89 Tm (11.5 Dashboard de desigualdade educacional) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 438.89 Tm (O dashboard territorial usa perfis de escolaridade com base na população de) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 423.89 Tm (25 anos ou mais. Ele trabalha com indicadores cumulativos:) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 400.89 Tm (- fundamental incompleto;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 383.89 Tm (- pelo menos fundamental completo;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 366.89 Tm (- pelo menos ensino médio completo;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 349.89 Tm (- superior completo;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 332.89 Tm (- anos médios de estudo.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 315.89 Tm (Interpretação correta) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 292.89 Tm (Como parte dos indicadores é cumulativa, a soma pode passar de 100%. Isso não) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 277.89 Tm (é bug. Isso acontece porque quem concluiu o ensino superior já está incluído) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 262.89 Tm (em "pelo menos ensino médio completo" e também em "pelo menos fundamental) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 247.89 Tm (completo".) Tj ET
+BT /F2 17 Tf 1 0 0 1 52.00 206.89 Tm (12. Ficha da escola e modais) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 176.89 Tm (A ficha da escola é montada inteiramente por JavaScript. Ela não existe) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 161.89 Tm (pronta no HTML. Quando o usuário clica numa linha, o sistema chama) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 146.89 Tm (`openSchoolModalById\(\)`, injeta o HTML da ficha e abre o modal.) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 109.89 Tm (12.1 Estrutura da ficha) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 85.89 Tm (A função `renderSchoolSheet\(row\)` organiza a ficha em seções:) Tj ET
+BT /F1 9 Tf 1 0 0 1 52.00 26.00 Tm (Documenta????o do projeto Educa????o no Campo - P??gina 11 de 17) Tj ET
+endstream
+endobj
+27 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 28 0 R >>
+endobj
+28 0 obj
+<< /Length 3319 >>
+stream
+BT /F1 10.5 Tf 1 0 0 1 66.00 783.89 Tm (- cabeçalho com tags e nome da escola;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 766.89 Tm (- localização e minimapa;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 749.89 Tm (- identificação;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 732.89 Tm (- oferta educacional;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 715.89 Tm (- matrículas por etapa;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 698.89 Tm (- contexto de renda;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 681.89 Tm (- dados complementares da escola;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 664.89 Tm (- contexto de alfabetização.) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 633.89 Tm (12.2 Renderização progressiva) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 609.89 Tm (Nem tudo da ficha chega de uma vez. Ao abrir o modal, o sistema já renderiza) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 594.89 Tm (o corpo principal com placeholders. Em seguida, dispara três atualizações) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 579.89 Tm (assíncronas:) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 556.89 Tm (- updateOpenSchoolModalEnrichment\(\);) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 539.89 Tm (- updateOpenSchoolModalIncome\(\);) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 522.89 Tm (- updateOpenSchoolModalLiteracy\(\).) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 505.89 Tm (Isso faz com que o modal abra rápido, mesmo que as integrações complementares) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 490.89 Tm (demorem.) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 453.89 Tm (12.3 Segundo modal: fontes da base) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 429.89 Tm (O projeto também ganhou um modal separado para explicar a origem de cada dado) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 414.89 Tm (usado. Esse modal é aberto pelo link "Verificar fontes da base de dados" no) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 399.89 Tm (final da home e é montado pela função `renderDataSourcesSheet\(\)`.) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 362.89 Tm (12.4 Controle de abertura e fechamento) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 338.89 Tm (Para os modais coexistirem sem conflito, o projeto usa:) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 315.89 Tm (- classes is-visible para mostrar e esconder;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 298.89 Tm (- aria-hidden para acessibilidade;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 281.89 Tm (- syncModalBodyState\(\) para travar o scroll do body quando qualquer modal) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 266.89 Tm (estiver aberto;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 249.89 Tm (- fechamento por botão, clique no overlay e tecla Escape.) Tj ET
+BT /F2 17 Tf 1 0 0 1 52.00 214.89 Tm (13. Cache complementar do Cultura Educa) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 184.89 Tm (O projeto não consulta diretamente a ficha pública do Cultura Educa a cada) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 169.89 Tm (clique. Em vez disso, usa um cache local. Essa decisão melhora a) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 154.89 Tm (estabilidade, reduz dependência de rede e evita problemas de CORS ou mudanças) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 139.89 Tm (repentinas da página.) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 102.89 Tm (13.1 O que faz o script build-school-enrichment.mjs) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 78.89 Tm (- lê a base principal para descobrir códigos INEP;) Tj ET
+BT /F1 9 Tf 1 0 0 1 52.00 26.00 Tm (Documenta????o do projeto Educa????o no Campo - P??gina 12 de 17) Tj ET
+endstream
+endobj
+29 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 30 0 R >>
+endobj
+30 0 obj
+<< /Length 3326 >>
+stream
+BT /F1 10.5 Tf 1 0 0 1 66.00 783.89 Tm (- acessa a ficha pública da escola;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 766.89 Tm (- extrai tabelas HTML por título;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 749.89 Tm (- normaliza linhas e valores;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 732.89 Tm (- gera um JSON local por código INEP.) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 701.89 Tm (13.2 Ponto importante: parser de booleanos) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 677.89 Tm (Um dos problemas reais que surgiu foi a leitura errada de checks visuais. Na) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 662.89 Tm (fonte pública, havia casos em que o "não" aparecia com um check discreto, e o) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 647.89 Tm (parser precisava diferenciar isso do check preto forte que significa "sim".) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 624.89 Tm (Esse tipo de problema ensina uma lição importante: scraping de HTML nunca) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 609.89 Tm (deve assumir que aparência visual e valor lógico são equivalentes sem) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 594.89 Tm (tratamento explícito.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 571.89 Tm (Lição prática) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 548.89 Tm (Sempre que você trouxer um dado externo e ele parecer contraditório, a) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 533.89 Tm (primeira pergunta deve ser: "o erro está no meu parser, no meu mapeamento ou) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 518.89 Tm (na fonte original?".) Tj ET
+BT /F2 17 Tf 1 0 0 1 52.00 477.89 Tm (14. Receitas de manutenção) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 433.89 Tm (14.1 Como adicionar um novo filtro simples vindo do JSON) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 409.89 Tm (- Adicione o select no index.html.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 392.89 Tm (- Inclua o novo elemento no objeto els.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 375.89 Tm (- Garanta que detectColumns\(\) saiba encontrar a coluna.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 358.89 Tm (- Inclua o filtro em FILTER_SELECTS.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 341.89 Tm (- Se quiser uma ordenação específica, adicione em FILTER_VALUE_ORDER.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 324.89 Tm (- Se ele for um filtro comum, o próprio buildFilters\(\) já vai preencher as) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 309.89 Tm (opções.) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 278.89 Tm (14.2 Como adicionar um filtro derivado) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 254.89 Tm (Se o valor não existe como coluna real na base, você precisa tratar em) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 239.89 Tm (`getFilterValue\(\)`. Foi exatamente assim que o filtro por região foi) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 224.89 Tm (resolvido.) Tj ET
+BT /F1 9 Tf 1 0 0 1 64.00 197.89 Tm (function getFilterValue\(row, key\) {) Tj ET
+BT /F1 9 Tf 1 0 0 1 64.00 184.89 Tm (if \(key === "region"\) {) Tj ET
+BT /F1 9 Tf 1 0 0 1 64.00 171.89 Tm (return getRegionByUf\(get\(row, "uf"\)\);) Tj ET
+BT /F1 9 Tf 1 0 0 1 64.00 158.89 Tm (}) Tj ET
+BT /F1 9 Tf 1 0 0 1 64.00 145.89 Tm ( ) Tj ET
+BT /F1 9 Tf 1 0 0 1 64.00 132.89 Tm (return get\(row, key\);) Tj ET
+BT /F1 9 Tf 1 0 0 1 64.00 119.89 Tm (}) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 84.89 Tm (14.3 Como adicionar um novo campo na ficha da escola) Tj ET
+BT /F1 9 Tf 1 0 0 1 52.00 26.00 Tm (Documenta????o do projeto Educa????o no Campo - P??gina 13 de 17) Tj ET
+endstream
+endobj
+31 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 32 0 R >>
+endobj
+32 0 obj
+<< /Length 3563 >>
+stream
+BT /F1 10.5 Tf 1 0 0 1 66.00 783.89 Tm (- Descubra se o dado vem da base local ou de uma integração externa.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 766.89 Tm (- Se vier da base local, garanta o mapeamento em detectColumns\(\).) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 749.89 Tm (- Monte o campo com renderProfileField\(\) ou uma função de render própria.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 732.89 Tm (- Insira o bloco dentro de renderSchoolSheet\(\).) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 715.89 Tm (- Se depender de dados externos, crie também placeholder e atualização) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 700.89 Tm (assíncrona.) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 669.89 Tm (14.4 Como adicionar um novo painel vindo de API) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 645.89 Tm (- Declare constantes de tabela, variável, ano e rótulo da fonte.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 628.89 Tm (- Crie uma função ensureBaseXLoaded\(\) para buscar e armazenar os dados no) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 613.89 Tm (estado global.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 596.89 Tm (- Crie um snapshot de contexto, como buildIncomeSnapshot\(\) ou) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 581.89 Tm (buildLiteracySnapshot\(\).) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 564.89 Tm (- Crie a função de renderização do painel.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 547.89 Tm (- Chame a atualização dentro de applyFilters\(\).) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 516.89 Tm (14.5 Como ajustar algo só no mobile) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 492.89 Tm (- Encontre a classe principal do bloco.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 475.89 Tm (- Procure os media queries do final do CSS.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 458.89 Tm (- Veja se já existe uma regra específica para aquele bloco em @media) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 443.89 Tm (\(max-width: 700px\) ou @media \(max-width: 560px\).) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 426.89 Tm (- Faça o ajuste ali, não no estilo base, se a mudança for apenas mobile.) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 395.89 Tm (14.6 Como pensar novas implementações sem bagunçar tudo) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 371.89 Tm (Use este raciocínio:) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 348.89 Tm (- o novo dado é local, derivado ou externo?) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 331.89 Tm (- ele entra como filtro, card, painel, modal ou detalhe da ficha?) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 314.89 Tm (- ele precisa estar disponível logo na abertura da página ou pode ser) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 299.89 Tm (carregado depois?) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 282.89 Tm (- ele precisa de cache?) Tj ET
+BT /F2 17 Tf 1 0 0 1 52.00 247.89 Tm (15. Checklist de depuração) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 217.89 Tm (Quando alguma coisa quebra, siga este checklist. Ele foi pensado para evitar) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 202.89 Tm (que você fique "caçando bug no escuro".) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 165.89 Tm (15.1 Se um filtro não funciona) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 141.89 Tm (- confirme se o elemento existe no HTML;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 124.89 Tm (- confirme se ele está em els;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 107.89 Tm (- veja se está em FILTER_SELECTS;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 90.89 Tm (- veja se a coluna existe em detectColumns\(\) ou em getFilterValue\(\);) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 73.89 Tm (- confirme se applyFilters\(\) está sendo chamado após a mudança.) Tj ET
+BT /F1 9 Tf 1 0 0 1 52.00 26.00 Tm (Documenta????o do projeto Educa????o no Campo - P??gina 14 de 17) Tj ET
+endstream
+endobj
+33 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 34 0 R >>
+endobj
+34 0 obj
+<< /Length 3053 >>
+stream
+BT /F2 13.5 Tf 1 0 0 1 52.00 769.89 Tm (15.2 Se um dado do modal aparece vazio) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 745.89 Tm (- o dado vem do JSON local?) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 728.89 Tm (- o dado vem do cache complementar?) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 711.89 Tm (- a função de render foi chamada antes da resposta assíncrona?) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 694.89 Tm (- o código INEP está correto?) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 677.89 Tm (- houve correspondência automática de município/UF no IBGE?) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 646.89 Tm (15.3 Se o texto aparece com acentuação estranha) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 622.89 Tm (- confirme se o arquivo está salvo em UTF-8;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 605.89 Tm (- confirme se o HTML mantém ;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 588.89 Tm (- veja se o dado já veio corrompido da fonte externa;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 571.89 Tm (- evite salvar os arquivos em ANSI no editor.) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 540.89 Tm (15.4 Se a interface quebra no smartphone) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 516.89 Tm (- veja o bloco no CSS base;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 499.89 Tm (- depois veja os media queries;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 482.89 Tm (- procure por max-width, grid-template-columns e width fixo;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 465.89 Tm (- inspecione se o problema vem de texto sem quebra ou de coluna com largura) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 450.89 Tm (rígida.) Tj ET
+BT /F2 17 Tf 1 0 0 1 52.00 415.89 Tm (16. Dívidas técnicas e pontos de atenção) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 385.89 Tm (Todo projeto real tem compromissos e atalhos. Conhecê-los ajuda muito mais do) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 370.89 Tm (que fingir que eles não existem.) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 333.89 Tm (16.1 O script.js está monolítico) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 309.89 Tm (Hoje ele concentra praticamente toda a aplicação. Isso funciona, mas) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 294.89 Tm (dificulta manutenção futura. Uma evolução natural seria separar em módulos,) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 279.89 Tm (por exemplo:) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 256.89 Tm (- data/local-base.js;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 239.89 Tm (- data/ibge.js;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 222.89 Tm (- ui/filters.js;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 205.89 Tm (- ui/table.js;) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 66.00 188.89 Tm (- ui/modals.js.) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 157.89 Tm (16.2 Há lógica legada no final do arquivo) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 133.89 Tm (No fim do `script.js` existem funções e objetos legados ligados à lógica) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 118.89 Tm (antiga de macroregião e escolas fechadas. Hoje o fluxo principal já substitui) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 103.89 Tm (isso. Esse trecho é um ótimo candidato a limpeza.) Tj ET
+BT /F1 9 Tf 1 0 0 1 52.00 26.00 Tm (Documenta????o do projeto Educa????o no Campo - P??gina 15 de 17) Tj ET
+endstream
+endobj
+35 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 36 0 R >>
+endobj
+36 0 obj
+<< /Length 3034 >>
+stream
+BT /F2 13.5 Tf 1 0 0 1 52.00 769.89 Tm (16.3 Há sinais de mojibake em partes do código-fonte) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 745.89 Tm (Mesmo quando a interface está sendo corrigida visualmente, o arquivo ainda) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 730.89 Tm (tem trechos com acentuação corrompida no código. Isso não impede o) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 715.89 Tm (funcionamento, mas é um sinal de que seria saudável fazer uma revisão geral) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 700.89 Tm (de codificação e normalização textual.) Tj ET
+BT /F2 13.5 Tf 1 0 0 1 52.00 663.89 Tm (16.4 Não há testes automatizados) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 639.89 Tm (Hoje a validação é majoritariamente manual. Isso é comum em projetos) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 624.89 Tm (pequenos, mas se o sistema crescer será importante adicionar, pelo menos,) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 609.89 Tm (testes de funções puras e algumas verificações de regressão em filtros e) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 594.89 Tm (renderização.) Tj ET
+BT /F2 17 Tf 1 0 0 1 52.00 553.89 Tm (17. Glossário para iniciantes) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 523.89 Tm (Termo | Explicação simples) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 500.89 Tm (Estado global | Objeto que guarda informações importantes do sistema para) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 485.89 Tm (várias funções reutilizarem.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 462.89 Tm (Renderizar | Transformar dados em HTML visível na tela.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 439.89 Tm (Snapshot | Retrato do contexto atual, usado para montar cards e painéis.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 416.89 Tm (Placeholder | Conteúdo temporário, como "Carregando...", mostrado antes do) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 401.89 Tm (dado real chegar.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 378.89 Tm (Fetch assíncrono | Requisição de dados que não retorna instantaneamente; o) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 363.89 Tm (código precisa esperar.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 340.89 Tm (Cache | Dado armazenado localmente para evitar baixar ou recalcular a mesma) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 325.89 Tm (coisa várias vezes.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 302.89 Tm (Função derivada | Função que calcula uma informação a partir de outra, como) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 287.89 Tm (região a partir da UF.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 264.89 Tm (Delegação de evento | Técnica em que um container escuta cliques de vários) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 249.89 Tm (elementos internos.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 226.89 Tm (Debounce | Atraso controlado para evitar disparar uma ação a cada tecla) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 211.89 Tm (digitada.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 188.89 Tm (Mojibake | Texto com acentuação quebrada por problema de codificação.) Tj ET
+BT /F2 17 Tf 1 0 0 1 52.00 147.89 Tm (18. Como regenerar o PDF) Tj ET
+BT /F1 9 Tf 1 0 0 1 52.00 26.00 Tm (Documenta????o do projeto Educa????o no Campo - P??gina 16 de 17) Tj ET
+endstream
+endobj
+37 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 38 0 R >>
+endobj
+38 0 obj
+<< /Length 1718 >>
+stream
+BT /F1 10.5 Tf 1 0 0 1 52.00 783.89 Tm (Junto desta documentação existe um script para exportar a versão em PDF a) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 768.89 Tm (partir deste HTML. Isso é útil porque, sempre que a documentação for) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 753.89 Tm (atualizada, você consegue gerar um PDF novo sem depender de ferramenta) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 738.89 Tm (externa manual.) Tj ET
+BT /F1 9 Tf 1 0 0 1 64.00 711.89 Tm (powershell -Command "Get-Content -Raw .\\scripts\\generate-project-documentation-pdf.mjs | node --input-type=module -") Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 690.89 Tm (O gerador principal em Node lê este HTML, organiza o texto em páginas e grava) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 675.89 Tm (o PDF em `output/pdf/documentacao-completa-projeto.pdf`. O script PowerShell) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 660.89 Tm (com navegador headless pode continuar existindo como alternativa, mas o fluxo) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 645.89 Tm (principal recomendado é o gerador em Node.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 622.89 Tm (Sugestão de hábito) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 599.89 Tm (Sempre que você fizer uma mudança grande no projeto, atualize este documento) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 584.89 Tm (no mesmo momento. Isso reduz a chance de o material didático ficar) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 569.89 Tm (desatualizado.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 546.89 Tm (Documento produzido para apoiar aprendizado, manutenção e futuras evoluções) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 52.00 531.89 Tm (do projeto Educação no Campo.) Tj ET
+BT /F1 9 Tf 1 0 0 1 52.00 26.00 Tm (Documenta????o do projeto Educa????o no Campo - P??gina 17 de 17) Tj ET
+endstream
+endobj
+xref
+0 39
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000226 00000 n 
+0000000321 00000 n 
+0000000421 00000 n 
+0000000563 00000 n 
+0000003707 00000 n 
+0000003849 00000 n 
+0000007715 00000 n 
+0000007858 00000 n 
+0000011747 00000 n 
+0000011891 00000 n 
+0000015747 00000 n 
+0000015891 00000 n 
+0000019004 00000 n 
+0000019148 00000 n 
+0000022800 00000 n 
+0000022944 00000 n 
+0000026853 00000 n 
+0000026997 00000 n 
+0000030297 00000 n 
+0000030441 00000 n 
+0000033900 00000 n 
+0000034044 00000 n 
+0000037455 00000 n 
+0000037599 00000 n 
+0000041032 00000 n 
+0000041176 00000 n 
+0000044548 00000 n 
+0000044692 00000 n 
+0000048071 00000 n 
+0000048215 00000 n 
+0000051831 00000 n 
+0000051975 00000 n 
+0000055081 00000 n 
+0000055225 00000 n 
+0000058312 00000 n 
+0000058456 00000 n 
+trailer
+<< /Size 39 /Root 1 0 R >>
+startxref
+60227
+%%EOF

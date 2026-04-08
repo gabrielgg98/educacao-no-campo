@@ -1,11 +1,3 @@
-{
-   "extensiondescription": {
-      "message": "Maak Drive-lêers direk vanaf jou blaaier oop in versoenbare programme wat op jou rekenaar geïnstalleer is."
-   },
-   "extensionname": {
-      "message": "Programlanseerder vir Drive (deur Google)"
-   },
-   "extensionshortname": {
-      "message": "Google Drive-programlanseerder"
-   }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:03f33f45adcaea0af1b0046d2c7b109df03e610574400bb34aba3c06607dd6e9
+size 338

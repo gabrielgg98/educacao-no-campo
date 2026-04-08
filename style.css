@@ -317,6 +317,19 @@ select.is-blocked {
   margin-bottom: 14px;
 }
 
+.toolbar--bottom {
+  margin-top: 6px;
+  margin-bottom: 0;
+  justify-content: flex-end;
+}
+
+.toolbar--bottom .toolbar-actions,
+.toolbar--bottom .pagination {
+  margin-left: auto;
+  width: 100%;
+  justify-content: flex-end;
+}
+
 .toolbar p {
   margin: 0;
   color: var(--muted);
@@ -1418,6 +1431,27 @@ th {
   text-decoration: none;
 }
 
+.school-enrichment__retry {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  padding: 11px 15px;
+  border-radius: 14px;
+  background: rgba(150,255,207,.08);
+  border: 1px solid rgba(150,255,207,.24);
+  color: #dff8ef;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.school-enrichment__retry:hover {
+  color: #07111f;
+  background: var(--accent);
+}
+
 .school-enrichment__link:hover {
   color: #07111f;
   background: var(--accent);
@@ -1645,6 +1679,12 @@ th {
   .pagination {
     width: 100%;
     justify-content: flex-start;
+  }
+
+  .toolbar--bottom .toolbar-actions,
+  .toolbar--bottom .pagination {
+    margin-left: auto;
+    justify-content: flex-end;
   }
 
   .results-card {

@@ -1,11 +1,3 @@
-{
-   "extensiondescription": {
-      "message": "컴퓨터에 설치된 호환 애플리케이션을 사용해 브라우저에서 바로 드라이브 파일을 엽니다."
-   },
-   "extensionname": {
-      "message": "Drive용 애플리케이션 런처(Google 제공)"
-   },
-   "extensionshortname": {
-      "message": "Google Drive 앱 런처"
-   }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:3199e1cba97d8f23bb3d50cdf175b4ae385a487c4a3ea15e92beef7e1da35036
+size 352

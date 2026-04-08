@@ -1,11 +1,3 @@
-{
-   "extensiondescription": {
-      "message": "Open Drive files directly from your browser in compatible applications installed on your computer."
-   },
-   "extensionname": {
-      "message": "Application Launcher For Drive (by Google)"
-   },
-   "extensionshortname": {
-      "message": "Google Drive App Launcher"
-   }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:02e62f1956493bef5ed3ee29b632d8e9da1e739a44de49c3dffca8f21dd0aeaf
+size 324

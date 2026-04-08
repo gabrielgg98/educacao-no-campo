@@ -1,11 +1,3 @@
-{
-   "extensiondescription": {
-      "message": "فایل‌های Drive را مستقیماً از مرورگرتان در برنامه‌های سازگار که در رایانه‌تان نصب شده است باز کنید."
-   },
-   "extensionname": {
-      "message": "راه‌انداز برنامه برای Drive (توسط Google)"
-   },
-   "extensionshortname": {
-      "message": "راه‌انداز برنامه Google Drive"
-   }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:5253bb64c79cf3f71ea1fcaabf0ba0045abe4193ece40d58b0b9e9582b2348b4
+size 448

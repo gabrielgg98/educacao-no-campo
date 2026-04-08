@@ -385,8 +385,8 @@
           <article class="card">
             <h3>Camada 3 - Enriquecimento por escola</h3>
             <p>
-              O arquivo <code>school-enrichment-cache.json</code> guarda uma camada extra derivada de uma ficha
-              pública por escola. Esse cache é consumido pela ficha do modal.
+              A pasta <code>school-enrichment-cache/</code> guarda uma camada extra derivada de fichas
+              públicas, com um arquivo por escola. Esse cache é consumido sob demanda pela ficha do modal.
             </p>
           </article>
         </div>
@@ -473,14 +473,19 @@
               <td>Normalmente você não edita na mão. O ideal é regenerar a partir da planilha fonte.</td>
             </tr>
             <tr>
-              <td><code>school-enrichment-cache.json</code></td>
-              <td>Cache complementar por código INEP, usado na ficha da escola.</td>
+              <td><code>school-enrichment-cache/</code></td>
+              <td>Cache complementar por código INEP, com um JSON por escola, usado na ficha da escola.</td>
               <td>Atualizar via script, não manualmente.</td>
             </tr>
             <tr>
               <td><code>scripts/build-school-enrichment.mjs</code></td>
               <td>Script que lê a ficha pública externa e gera o cache complementar local.</td>
               <td>Corrigir parser, adicionar novos campos ou filtrar dados inadequados.</td>
+            </tr>
+            <tr>
+              <td><code>scripts/run-school-enrichment-sync.ps1</code></td>
+              <td>Atalho em PowerShell para executar a sincronização do cache complementar.</td>
+              <td>Ideal para rodar testes secos, sincronizações completas e retomadas.</td>
             </tr>
           </tbody>
         </table>
@@ -1210,9 +1215,13 @@ const visibleRows = app.filteredRows.slice(startIndex, endIndex);</code></pre>
           sempre que a documentação for atualizada, você consegue gerar um PDF novo sem depender de ferramenta externa manual.
         </p>
 
-        <pre><code>powershell -ExecutionPolicy Bypass -File .\scripts\export-project-documentation-pdf.ps1</code></pre>
+        <pre><code>powershell -Command "Get-Content -Raw .\scripts\generate-project-documentation-pdf.mjs | node --input-type=module -"</code></pre>
 
-        <p>O script usa o Chrome instalado na máquina em modo headless para imprimir este arquivo HTML em PDF.</p>
+        <p>
+          O gerador principal em Node lê este HTML, organiza o texto em páginas e grava o PDF em
+          <code>output/pdf/documentacao-completa-projeto.pdf</code>. O script PowerShell com navegador headless pode
+          continuar existindo como alternativa, mas o fluxo principal recomendado é o gerador em Node.
+        </p>
 
         <div class="tip">
           <span class="label">Sugestão de hábito</span>

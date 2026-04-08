@@ -1,11 +1,3 @@
-{
-   "extensiondescription": {
-      "message": "Отварајте фајлове Диска директно из прегледача у компатибилним апликацијама инсталираним на рачунару."
-   },
-   "extensionname": {
-      "message": "Покретач апликација за Диск (од Google-а)"
-   },
-   "extensionshortname": {
-      "message": "Покретач апликација Google диска"
-   }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:0aa1c3a8244af4eb20542e69325eecd917a54bc5fb7f26c703fec6396d7c60b0
+size 472

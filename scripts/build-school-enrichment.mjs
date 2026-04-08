@@ -1,15 +1,13 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const projectRoot = path.resolve(__dirname, "..");
+const projectRoot = process.cwd();
 
 const SCHOOLS_FILE = path.join(projectRoot, "escolas-rurais.json");
-const CACHE_FILE = path.join(projectRoot, "school-enrichment-cache.json");
+const LEGACY_CACHE_FILE = path.join(projectRoot, "school-enrichment-cache.json");
+const CACHE_DIR = path.join(projectRoot, "school-enrichment-cache");
+const STATUS_DIR = path.join(projectRoot, "school-enrichment-status");
 const CULTURA_EDUCA_BASE_URL = "https://culturaeduca.cc/equipamento/escola_detalhe";
-const SOURCE_LABEL = "Cultura Educa • Censo Escolar da Educação Básica 2020";
+const SOURCE_LABEL = "Cultura Educa \u2022 Censo Escolar da Educa\u00e7\u00e3o B\u00e1sica 2020";
 
 function escapeRegex(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -35,14 +33,37 @@ function decodeHtmlEntities(value) {
     .replace(/&uacute;/gi, "ú");
 }
 
+function repairMojibake(value) {
+  const textValue = String(value ?? "");
+
+  if (!/[ÃÂ]/.test(textValue)) {
+    return textValue;
+  }
+
+  try {
+    return Buffer.from(textValue, "latin1").toString("utf8");
+  } catch {
+    return textValue;
+  }
+}
+
 function cleanText(value) {
-  return decodeHtmlEntities(
+  return repairMojibake(decodeHtmlEntities(
     String(value ?? "")
       .replace(/<br\s*\/?>/gi, " ")
       .replace(/<[^>]+>/g, " ")
       .replace(/\s+/g, " ")
       .trim()
-  );
+  ));
+}
+
+function normalizeLookupText(value) {
+  return cleanText(value)
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
 }
 
 function parseIconBooleanCell(cellHtml) {
@@ -66,10 +87,13 @@ function parseCellValue(cellHtml) {
 }
 
 function extractTableByHeading(html, heading) {
-  const headingPattern = new RegExp(`<h5>\\s*${escapeRegex(heading)}\\s*<\\/h5>`, "i");
   const tables = [...html.matchAll(/<table[\s\S]*?<\/table>/gi)].map(match => match[0]);
+  const normalizedHeading = normalizeLookupText(heading);
 
-  return tables.find(tableHtml => headingPattern.test(tableHtml)) ?? "";
+  return tables.find(tableHtml => {
+    const tableHeading = tableHtml.match(/<h5>\s*([\s\S]*?)\s*<\/h5>/i)?.[1] ?? "";
+    return normalizeLookupText(tableHeading) === normalizedHeading;
+  }) ?? "";
 }
 
 function parseTableRows(tableHtml) {
@@ -83,8 +107,8 @@ function parseTableRows(tableHtml) {
 }
 
 function getRowValue(rows, label) {
-  const normalizedLabel = cleanText(label);
-  const row = rows.find(cells => cleanText(cells[0]) === normalizedLabel);
+  const normalizedLabel = normalizeLookupText(label);
+  const row = rows.find(cells => normalizeLookupText(cells[0]) === normalizedLabel);
 
   if (!row || row.length < 2) {
     return "";
@@ -94,8 +118,8 @@ function getRowValue(rows, label) {
 }
 
 function hasRow(rows, label) {
-  const normalizedLabel = cleanText(label);
-  return rows.some(cells => cells.some(cell => cleanText(cell) === normalizedLabel));
+  const normalizedLabel = normalizeLookupText(label);
+  return rows.some(cells => cells.some(cell => normalizeLookupText(cell) === normalizedLabel));
 }
 
 function buildSectionRows(rows, {
@@ -146,7 +170,13 @@ function buildEnrollmentRows(rows) {
     const label = cleanText(cells[0]);
     const value = cleanText(cells[cells.length - 1]);
 
-    if (!label || !value || value === label || /^Fonte:/i.test(label) || !/matr[ií]culas?/i.test(value)) {
+    if (
+      !label ||
+      !value ||
+      value === label ||
+      /^Fonte:/i.test(label) ||
+      !normalizeLookupText(value).includes("matricula")
+    ) {
       return [];
     }
 
@@ -213,13 +243,13 @@ function buildSchoolUrl(inepCode) {
 }
 
 function extractSchoolEnrichment(html, inepCode) {
-  const enrollmentTitle = "Matrículas";
-  const communityTitle = "Relação escola-comunidade";
-  const facilitiesTitle = "Infraestrutura (Dependências)";
-  const digitalTitle = "Internet, Computadores e Equipamentos Multimídia";
+  const enrollmentTitle = "Matriculas";
+  const communityTitle = "Relacao escola-comunidade";
+  const facilitiesTitle = "Infraestrutura (Dependencias)";
+  const digitalTitle = "Internet, Computadores e Equipamentos Multimidia";
   const staffTitle = "Profissionais que atuam na escola";
   const studentTitle = "Alunos";
-  const transportLabel = "Utiliza transporte escolar público";
+  const transportLabel = "Utiliza transporte escolar publico";
   const totalStudentsLabel = "Total de Alunos";
   const enrollmentRows = parseTableRows(extractTableByHeading(html, enrollmentTitle));
   const enrollments = buildEnrollmentRows(enrollmentRows);
@@ -350,8 +380,10 @@ function parseArgs(argv) {
   const options = {
     ineps: [],
     limit: 20,
+    start: 0,
     force: false,
-    delayMs: 200
+    delayMs: 200,
+    dryRun: false
   };
 
   for (let index = 0; index < argv.length; index += 1) {
@@ -375,6 +407,15 @@ function parseArgs(argv) {
       continue;
     }
 
+    if (arg === "--start") {
+      const nextValue = Number(argv[index + 1] ?? options.start);
+      if (Number.isFinite(nextValue) && nextValue >= 0) {
+        options.start = nextValue;
+      }
+      index += 1;
+      continue;
+    }
+
     if (arg === "--delay") {
       const nextValue = Number(argv[index + 1] ?? options.delayMs);
       if (Number.isFinite(nextValue) && nextValue >= 0) {
@@ -386,6 +427,11 @@ function parseArgs(argv) {
 
     if (arg === "--force") {
       options.force = true;
+      continue;
+    }
+
+    if (arg === "--dry-run") {
+      options.dryRun = true;
     }
   }
 
@@ -404,26 +450,126 @@ async function readJson(filePath, fallback) {
   }
 }
 
+function getCacheFilePath(inepCode) {
+  return path.join(CACHE_DIR, `${inepCode}.json`);
+}
+
+function getStatusFilePath(inepCode) {
+  return path.join(STATUS_DIR, `${inepCode}.json`);
+}
+
+async function fileExists(filePath) {
+  try {
+    await fs.access(filePath);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+async function readStatusEntry(inepCode) {
+  return readJson(getStatusFilePath(inepCode), null);
+}
+
+async function writeStatusEntry(inepCode, payload) {
+  await fs.writeFile(getStatusFilePath(inepCode), `${JSON.stringify(payload, null, 2)}\n`, "utf8");
+}
+
+async function clearStatusEntry(inepCode) {
+  try {
+    await fs.unlink(getStatusFilePath(inepCode));
+  } catch {
+    // Sem status anterior para remover.
+  }
+}
+
+async function migrateLegacyCacheToPerSchoolFiles() {
+  const legacyCache = await readJson(LEGACY_CACHE_FILE, {});
+  const entries = Object.entries(legacyCache).filter(([inepCode, value]) => inepCode && value && typeof value === "object");
+
+  if (!entries.length) {
+    return 0;
+  }
+
+  let migratedCount = 0;
+
+  for (const [inepCode, value] of entries) {
+    const targetFilePath = getCacheFilePath(inepCode);
+
+    if (await fileExists(targetFilePath)) {
+      continue;
+    }
+
+    await fs.writeFile(targetFilePath, `${JSON.stringify(value, null, 2)}\n`, "utf8");
+    migratedCount += 1;
+  }
+
+  return migratedCount;
+}
+
+function getInepCodeFromRowLegacy(row) {
+  return String(
+    row?.["Código INEP"] ??
+    row?.["Codigo INEP"] ??
+    row?.["CÃ³digo INEP"] ??
+    ""
+  ).trim();
+}
+
+function getInepCodeFromRow(row) {
+  if (!row || typeof row !== "object") {
+    return "";
+  }
+
+  const matchingEntry = Object.entries(row).find(([key]) => /inep/i.test(String(key ?? "")));
+  return String(matchingEntry?.[1] ?? "").trim();
+}
+
 async function main() {
   const options = parseArgs(process.argv.slice(2));
   const schools = await readJson(SCHOOLS_FILE, []);
-  const cache = await readJson(CACHE_FILE, {});
+  await fs.mkdir(CACHE_DIR, { recursive: true });
+  await fs.mkdir(STATUS_DIR, { recursive: true });
+  const migratedCount = await migrateLegacyCacheToPerSchoolFiles();
   const allInepCodes = [...new Set(
     schools
-      .map(row => String(row["Código INEP"] ?? "").trim())
+      .map(row => getInepCodeFromRow(row))
       .filter(Boolean)
   )];
 
   const requestedCodes = options.ineps.length
     ? options.ineps
-    : allInepCodes.slice(0, options.limit);
+    : (
+      options.limit === 0
+        ? allInepCodes.slice(options.start)
+        : allInepCodes.slice(options.start, options.start + options.limit)
+    );
 
-  const targetCodes = options.force
-    ? requestedCodes
-    : requestedCodes.filter(code => !cache[code]);
+  const targetCodes = [];
+
+  for (const code of requestedCodes) {
+    const hasCacheFile = await fileExists(getCacheFilePath(code));
+    const statusEntry = await readStatusEntry(code);
+    const wasNotFound = String(statusEntry?.status ?? "").trim().toLowerCase() === "not_found";
+
+    if (options.force || (!hasCacheFile && !wasNotFound)) {
+      targetCodes.push(code);
+    }
+  }
+
+  if (migratedCount > 0) {
+    console.log(`Cache legado migrado: ${migratedCount} escola(s) convertidas para ${CACHE_DIR}.`);
+  }
 
   if (!targetCodes.length) {
     console.log("Nenhum Código INEP pendente para sincronização.");
+    return;
+  }
+
+  if (options.dryRun) {
+    console.log(`Dry run: ${targetCodes.length} escola(s) pendente(s) para sincronização.`);
+    console.log(`Primeiro Código INEP: ${targetCodes[0]}`);
+    console.log(`Último Código INEP: ${targetCodes[targetCodes.length - 1]}`);
     return;
   }
 
@@ -446,9 +592,28 @@ async function main() {
       }
 
       const html = await response.text();
-      cache[inepCode] = extractSchoolEnrichment(html, inepCode);
+      const enrichmentEntry = extractSchoolEnrichment(html, inepCode);
+      await fs.writeFile(
+        getCacheFilePath(inepCode),
+        `${JSON.stringify(enrichmentEntry, null, 2)}\n`,
+        "utf8"
+      );
+      await clearStatusEntry(inepCode);
       console.log(`[${index + 1}/${targetCodes.length}] ${inepCode} sincronizado.`);
     } catch (error) {
+      const normalizedMessage = String(error?.message ?? "Erro desconhecido");
+      const status = normalizedMessage === "HTTP 404" ? "not_found" : "error";
+
+      await writeStatusEntry(inepCode, {
+        inepCode,
+        status,
+        message: normalizedMessage,
+        checkedAt: new Date().toISOString(),
+        source: {
+          label: SOURCE_LABEL,
+          url
+        }
+      });
       console.error(`[${index + 1}/${targetCodes.length}] ${inepCode} falhou: ${error.message}`);
     }
 
@@ -457,8 +622,7 @@ async function main() {
     }
   }
 
-  await fs.writeFile(CACHE_FILE, `${JSON.stringify(cache, null, 2)}\n`, "utf8");
-  console.log(`Cache atualizado em ${CACHE_FILE}`);
+  console.log(`Cache atualizado em ${CACHE_DIR}`);
 }
 
 main().catch(error => {

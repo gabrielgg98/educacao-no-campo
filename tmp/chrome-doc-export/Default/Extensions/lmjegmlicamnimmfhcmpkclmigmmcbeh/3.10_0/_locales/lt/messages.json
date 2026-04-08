@@ -1,11 +1,3 @@
-{
-   "extensiondescription": {
-      "message": "Atidarykite Disko failus tiesiogiai iš naršyklės naudodami kompiuteryje įdiegtas suderinamas programas."
-   },
-   "extensionname": {
-      "message": "Diskui skirta programų paleidimo priemonė (teikia „Google“)"
-   },
-   "extensionshortname": {
-      "message": "„Google“ disko programų paleidimo priemonė"
-   }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:98e297b2c3feb2fb833e6b11509cc2508ef0a3e6e5f8a230d2d346b1162d552a
+size 379

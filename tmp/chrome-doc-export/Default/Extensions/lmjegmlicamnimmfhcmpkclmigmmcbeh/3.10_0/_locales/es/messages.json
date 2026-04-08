@@ -1,11 +1,3 @@
-{
-   "extensiondescription": {
-      "message": "Abre archivos de Drive directamente desde tu navegador en las aplicaciones compatibles que tengas instaladas en tu ordenador."
-   },
-   "extensionname": {
-      "message": "Menú de aplicaciones de Drive (de Google)"
-   },
-   "extensionshortname": {
-      "message": "Menú de aplicaciones de Google Drive"
-   }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:1a26a9351a632ccb12e9a3f3686c3493cf554be721911a93af7eb19b90d55323
+size 363

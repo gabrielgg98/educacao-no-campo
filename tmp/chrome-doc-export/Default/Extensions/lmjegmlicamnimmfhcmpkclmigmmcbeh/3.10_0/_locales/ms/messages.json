@@ -1,11 +1,3 @@
-{
-   "extensiondescription": {
-      "message": "Buka fail Drive terus daripada penyemak imbas anda dalam aplikasi serasi yang dipasang pada komputer anda."
-   },
-   "extensionname": {
-      "message": "Pelancar Aplikasi Untuk Drive (oleh Google)"
-   },
-   "extensionshortname": {
-      "message": "Pelancar Apl Google Drive"
-   }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:fc6f26ba8ac8a85c9f41f88e300e1f0ddd98728d32b773c08c7a269514ba415c
+size 333

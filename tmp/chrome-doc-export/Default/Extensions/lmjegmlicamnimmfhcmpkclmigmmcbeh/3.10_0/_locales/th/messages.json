@@ -1,11 +1,3 @@
-{
-   "extensiondescription": {
-      "message": "เปิดไฟล์ในไดรฟ์จากเบราว์เซอร์โดยตรงในแอปพลิเคชันที่ใช้งานร่วมกันได้ซึ่งคุณติดตั้งไว้ในคอมพิวเตอร์"
-   },
-   "extensionname": {
-      "message": "Launcher ของแอปพลิเคชันสำหรับไดรฟ์ (โดย Google)"
-   },
-   "extensionshortname": {
-      "message": "Launcher ของแอปสำหรับ Google ไดรฟ์"
-   }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:7a5a1fad2d08730384ad96ee2c42c459a4681e22d3f7535c38b12d2879ec0e76
+size 621

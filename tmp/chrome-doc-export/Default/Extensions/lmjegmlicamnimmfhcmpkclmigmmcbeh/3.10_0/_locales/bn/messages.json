@@ -1,11 +1,3 @@
-{
-   "extensiondescription": {
-      "message": "আপনার কম্পিউটারে ইনস্টল করা মানানসই অ্যাপ্লিকেশনে আপনার ব্রাউজার থেকে সরাসরি Drive-এর ফাইল খুলুন।"
-   },
-   "extensionname": {
-      "message": "Drive-এর অ্যাপ্লিকেশন লঞ্চার (Google থেকে)"
-   },
-   "extensionshortname": {
-      "message": "Google Drive অ্যাপ লঞ্চার"
-   }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:42f3de96d88edfd4759fe7cff29cc2b7cee44dab7fbec2b9848b285c0dcc6d93
+size 551

@@ -1,11 +1,3 @@
-{
-   "extensiondescription": {
-      "message": "يمكنك فتح ملفات Drive مباشرةً من متصفحك في التطبيقات المتوافقة المُثبَّتة على الكمبيوتر."
-   },
-   "extensionname": {
-      "message": "Application Launcher For Drive (من Google)"
-   },
-   "extensionshortname": {
-      "message": "Google Drive App Launcher"
-   }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:d79b58a554aceccf8886d59d68d299566d1b3377ad188e26ccddb69a4a1d7e30
+size 386

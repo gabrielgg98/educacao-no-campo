@@ -1,11 +1,3 @@
-{
-   "extensiondescription": {
-      "message": "Otvárajte súbory Disku priamo z prehliadača v kompatibilných aplikáciách, ktoré máte nainštalované v počítači."
-   },
-   "extensionname": {
-      "message": "Spúšťač aplikácie pre Disk (od Googlu)"
-   },
-   "extensionshortname": {
-      "message": "Spúšťač aplikácií pre Disk Google"
-   }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:97696571aa87d99107d4ed5edb010400b0fd5c236c09bdaf1732a49fe587c7f5
+size 367

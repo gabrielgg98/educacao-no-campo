@@ -1,11 +1,3 @@
-{
-   "extensiondescription": {
-      "message": "Deschide fișierele din Drive direct din browser în aplicații compatibile instalate pe computer."
-   },
-   "extensionname": {
-      "message": "Lansator de aplicații pentru Drive (un produs Google)"
-   },
-   "extensionshortname": {
-      "message": "Lansatorul de aplicații Google Drive"
-   }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:72b32cba792c08b3914dde726ccff08e2ac7181e4da2fdeababb8b94fa58e55a
+size 348

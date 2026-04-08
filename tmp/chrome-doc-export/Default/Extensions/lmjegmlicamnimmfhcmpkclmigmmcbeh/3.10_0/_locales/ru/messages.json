@@ -1,11 +1,3 @@
-{
-   "extensiondescription": {
-      "message": "Программа позволяет при помощи браузера открывать файлы с Диска прямо в установленных на компьютере приложениях."
-   },
-   "extensionname": {
-      "message": "Программа запуска приложений для Диска, разработанная Google"
-   },
-   "extensionshortname": {
-      "message": "Программа запуска приложений для Диска"
-   }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:60bedd72b38d770e5af4099c442077a74590c1aa02c9ddcb6fb1480d20f0f1d5
+size 547

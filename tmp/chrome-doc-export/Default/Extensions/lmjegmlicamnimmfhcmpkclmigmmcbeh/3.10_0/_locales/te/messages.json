@@ -1,11 +1,3 @@
-{
-   "extensiondescription": {
-      "message": "మీ కంప్యూటర్‌లో ఇన్‌స్టాల్ చేసిన అనుకూల యాప్‌లలోని మీ బ్రౌజర్ నుండి Drive ఫైళ్లను నేరుగా తెరవండి."
-   },
-   "extensionname": {
-      "message": "Drive కోసం యాప్ లాంచర్ (Google తయారు చేసినది)"
-   },
-   "extensionshortname": {
-      "message": "Google Drive యాప్ లాంచర్"
-   }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:a1cd1b28fab9bbd784de04991cd2e5b4457ffc85aebcfc096ee5237bcabf09b9
+size 555

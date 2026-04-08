@@ -1,11 +1,3 @@
-{
-   "extensiondescription": {
-      "message": "கம்ப்யூட்டரில் நிறுவப்பட்டுள்ள இணக்கமான ஆப்ஸ் மூலம் உலாவியில் இருந்து நேரடியாக Drive ஃபைல்களைத் திறக்கலாம்."
-   },
-   "extensionname": {
-      "message": "Driveவுக்கான ஆப்ஸ் தொடக்கி (Google வழங்குவது)"
-   },
-   "extensionshortname": {
-      "message": "Google Drive ஆப்ஸ் தொடக்கி"
-   }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:6ea0ec276cff1530df4edd3a0ee72fc1b7285e0853459210191ceac66c5aa313
+size 599

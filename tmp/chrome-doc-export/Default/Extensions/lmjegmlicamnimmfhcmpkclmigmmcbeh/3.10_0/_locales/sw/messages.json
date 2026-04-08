@@ -1,11 +1,3 @@
-{
-   "extensiondescription": {
-      "message": "Fungua faili za Hifadhi moja kwa moja kwenye kivinjari chako katika programu zinazooana ambazo tayari zimesakinishwa kwenye kompyuta yako."
-   },
-   "extensionname": {
-      "message": "Kifungua Programu Cha Hifadhi (kutoka Google)"
-   },
-   "extensionshortname": {
-      "message": "Kifungua Programu cha Hifadhi ya Google"
-   }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:412604d2220b6e66fb0b581e2077a1910e59ff44f3e0b65905a4007ad31d4df7
+size 381

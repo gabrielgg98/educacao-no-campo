@@ -1,11 +1,3 @@
-{
-   "extensiondescription": {
-      "message": "Drive फाइल थेट तुमच्या ब्राउझरवरून तुमच्या काँप्युटरवर इंस्टॉल केलेल्या कंपॅटिबल अ‍ॅप्लिकेशनवर उघडा."
-   },
-   "extensionname": {
-      "message": "Drive साठी अ‍ॅप्लिकेशन लाँचर (Google द्वारे)"
-   },
-   "extensionshortname": {
-      "message": "Google Drive ॲप लाँचर"
-   }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:940aae995d847a5d4dd1466805bfc67f995f830f5993e5e8a57c684871f97205
+size 556

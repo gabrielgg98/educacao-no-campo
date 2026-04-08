@@ -1,11 +1,3 @@
-{
-   "extensiondescription": {
-      "message": "Saate avada Drive’i faile arvutisse installitud ühilduvates rakendustes otse oma brauserist."
-   },
-   "extensionname": {
-      "message": "Rakenduste käivitaja Drive’ile (Google’ilt)"
-   },
-   "extensionshortname": {
-      "message": "Google Drive’i rakenduste käivitaja"
-   }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:01cbc15a2fecd21c3e5879a13a196cc1404a7c516c8ba7e3817e3cd5777fdb59
+size 340

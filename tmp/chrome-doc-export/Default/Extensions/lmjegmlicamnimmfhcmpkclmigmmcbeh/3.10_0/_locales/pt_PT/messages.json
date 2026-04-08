@@ -1,11 +1,3 @@
-{
-   "extensiondescription": {
-      "message": "Abra ficheiros do Drive diretamente a partir do navegador em aplicações compatíveis instaladas no computador."
-   },
-   "extensionname": {
-      "message": "Launcher de aplicações para o Drive (da Google)"
-   },
-   "extensionshortname": {
-      "message": "Launcher de apps do Google Drive"
-   }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:046bd8381c5cc4314d8872adfcc2a3dc509589e67defde692d259e6b952458a6
+size 352

@@ -29,7 +29,11 @@ const EDUCATION_SECONDARY_COMPLETE_LABEL = "Pelo menos ensino médio completo";
 const INCOME_SOURCE_LABEL = "IBGE • Censo Demográfico 2022 • Tabela 10295";
 const LOCAL_PROJECT_SOURCE_LABEL = "Base local do projeto (escolas-rurais.json)";
 const MAP_SOURCE_LABEL = "Base local do projeto (escolas-rurais.json) + Google Maps";
-const SCHOOL_ENRICHMENT_CACHE_URL = "school-enrichment-cache.json";
+const SCHOOL_ENRICHMENT_CACHE_DIR = "school-enrichment-cache";
+const SCHOOL_ENRICHMENT_STATUS_DIR = "school-enrichment-status";
+const SCHOOL_ENRICHMENT_BUNDLE_DIR = "school-enrichment-bundle";
+const SCHOOL_ENRICHMENT_BUNDLE_MANIFEST_URL = `${SCHOOL_ENRICHMENT_BUNDLE_DIR}/manifest.json`;
+const SCHOOL_ENRICHMENT_LEGACY_CACHE_URL = "school-enrichment-cache.json";
 const SCHOOL_ENRICHMENT_SOURCE_LABEL = "Cultura Educa • Censo Escolar da Educação Básica 2020";
 
 const FILTER_SELECTS = [
@@ -140,8 +144,17 @@ const app = {
   },
   schoolEnrichment: {
     byInep: {},
-    loaded: false,
-    pendingPromise: null
+    statusByInep: {},
+    pendingByInep: new Map(),
+    pendingStatusByInep: new Map(),
+    manifest: null,
+    pendingManifestPromise: null,
+    loadedShardIds: new Set(),
+    pendingShardById: new Map(),
+    legacyLoaded: false,
+    pendingLegacyPromise: null,
+    retryTimerId: 0,
+    retryCount: 0
   }
 };
 
@@ -188,6 +201,7 @@ const totalEscolasFechadas = Object.values(escolasFechadasPorMacroregiao)
 
 const CITY_FILTER_HINT_TEXT = "Escolha a UF para visualizar os municípios.";
 let cityFilterHintTimeoutId = 0;
+let deferredHomePanelsTimeoutId = 0;
 
 const els = {
   searchInput: document.getElementById("searchInput"),
@@ -220,6 +234,7 @@ const els = {
   educationDashboardSource: document.getElementById("educationDashboardSource"),
   resultSummary: document.getElementById("resultSummary"),
   tableWrap: document.getElementById("tableWrap"),
+  paginationWrapBottom: document.getElementById("paginationWrapBottom"),
   paginationWrap: document.getElementById("paginationWrap"),
   openSourcesModal: document.getElementById("openSourcesModal"),
   schoolModal: document.getElementById("schoolModal"),
@@ -241,8 +256,75 @@ function normalize(value) {
     .toLowerCase();
 }
 
+const UTF8_TEXT_DECODER = typeof TextDecoder !== "undefined"
+  ? new TextDecoder("utf-8")
+  : null;
+const LATIN1_TEXT_DECODER = typeof TextDecoder !== "undefined"
+  ? new TextDecoder("windows-1252")
+  : null;
+const TEXT_REPAIR_CACHE = new Map();
+
+function repairMojibake(value) {
+  const resolvedValue = String(value ?? "");
+  const cachedValue = TEXT_REPAIR_CACHE.get(resolvedValue);
+
+  if (!/[ÃÂ]/.test(resolvedValue) || !UTF8_TEXT_DECODER) {
+    return resolvedValue;
+  }
+
+  try {
+    const bytes = Uint8Array.from(resolvedValue, character => character.charCodeAt(0));
+    return UTF8_TEXT_DECODER.decode(bytes);
+  } catch (error) {
+    return resolvedValue;
+  }
+}
+
+function repairMojibakeCached(value) {
+  const resolvedValue = String(value ?? "");
+  const cachedValue = TEXT_REPAIR_CACHE.get(resolvedValue);
+
+  if (cachedValue !== undefined) {
+    return cachedValue;
+  }
+
+  let finalValue = resolvedValue;
+
+  if (
+    UTF8_TEXT_DECODER &&
+    (
+      resolvedValue.includes("Ã") ||
+      resolvedValue.includes("Â") ||
+      resolvedValue.includes("â")
+    )
+  ) {
+    try {
+      const bytes = Uint8Array.from(resolvedValue, character => character.charCodeAt(0));
+      finalValue = UTF8_TEXT_DECODER.decode(bytes);
+    } catch (error) {
+      finalValue = resolvedValue;
+    }
+  }
+
+  if (TEXT_REPAIR_CACHE.size > 20000) {
+    TEXT_REPAIR_CACHE.clear();
+  }
+
+  TEXT_REPAIR_CACHE.set(resolvedValue, finalValue);
+  return finalValue;
+}
+
 function text(value) {
-  return String(value ?? "").trim();
+  return repairMojibakeCached(String(value ?? "").trim());
+}
+
+function normalizeText(value) {
+  return text(value)
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
 }
 
 function escapeHtml(value) {
@@ -267,7 +349,8 @@ function buildMapsEmbedUrl(row) {
   const coordinates = getSchoolCoordinates(row);
 
   if (coordinates) {
-    return `https://www.google.com/maps?hl=pt-BR&q=${coordinates.lat},${coordinates.lng}&z=16&t=k&output=embed`;
+    const coordinateQuery = `${coordinates.lat},${coordinates.lng}`;
+    return `https://maps.google.com/maps?hl=pt-BR&ll=${encodeURIComponent(coordinateQuery)}&q=${encodeURIComponent(coordinateQuery)}&z=16&t=k&output=embed`;
   }
 
   const query = [get(row, "school"), get(row, "address"), get(row, "city"), get(row, "uf")]
@@ -277,7 +360,7 @@ function buildMapsEmbedUrl(row) {
 
   if (!query) return "";
 
-  return `https://www.google.com/maps?hl=pt-BR&q=${encodeURIComponent(query)}&z=15&t=k&output=embed`;
+  return `https://maps.google.com/maps?hl=pt-BR&q=${encodeURIComponent(query)}&z=15&t=k&output=embed`;
 }
 
 function buildCultureEducaSchoolUrl(row) {
@@ -466,41 +549,300 @@ function buildCoordinateSummary(row) {
   return `Lat ${formatCoordinate(coordinates.lat)} • Long ${formatCoordinate(coordinates.lng)}`;
 }
 
-async function ensureSchoolEnrichmentLoaded() {
-  if (app.schoolEnrichment.loaded) {
-    return app.schoolEnrichment.byInep;
+function buildSchoolEnrichmentCacheUrl(inepCode) {
+  return `${SCHOOL_ENRICHMENT_CACHE_DIR}/${encodeURIComponent(text(inepCode))}.json`;
+}
+
+function buildSchoolEnrichmentStatusUrl(inepCode) {
+  return `${SCHOOL_ENRICHMENT_STATUS_DIR}/${encodeURIComponent(text(inepCode))}.json`;
+}
+
+function buildSchoolEnrichmentShardUrl(shardId) {
+  const resolvedShardId = Number(shardId);
+
+  if (!Number.isFinite(resolvedShardId) || resolvedShardId < 1) {
+    return "";
   }
 
-  if (!app.schoolEnrichment.pendingPromise) {
-    app.schoolEnrichment.pendingPromise = (async () => {
+  return `${SCHOOL_ENRICHMENT_BUNDLE_DIR}/shard-${String(resolvedShardId).padStart(4, "0")}.json`;
+}
+
+async function ensureSchoolEnrichmentManifestLoaded() {
+  if (app.schoolEnrichment.manifest) {
+    return app.schoolEnrichment.manifest;
+  }
+
+  if (!app.schoolEnrichment.pendingManifestPromise) {
+    app.schoolEnrichment.pendingManifestPromise = (async () => {
       try {
         let data;
 
         try {
-          data = await loadJsonWithFetch(SCHOOL_ENRICHMENT_CACHE_URL);
+          data = await loadJsonWithFetch(SCHOOL_ENRICHMENT_BUNDLE_MANIFEST_URL);
         } catch (fetchError) {
-          data = await loadJsonWithXhr(SCHOOL_ENRICHMENT_CACHE_URL);
+          data = await loadJsonWithXhr(SCHOOL_ENRICHMENT_BUNDLE_MANIFEST_URL);
         }
 
-        app.schoolEnrichment.byInep = data && typeof data === "object" ? data : {};
+        if (data && typeof data === "object") {
+          app.schoolEnrichment.manifest = data;
+          return data;
+        }
       } catch (error) {
-        app.schoolEnrichment.byInep = {};
+        // Se a base fragmentada ainda não existir, seguimos com os fallbacks locais.
       } finally {
-        app.schoolEnrichment.loaded = true;
+        app.schoolEnrichment.pendingManifestPromise = null;
+      }
+
+      app.schoolEnrichment.manifest = null;
+      return null;
+    })();
+  }
+
+  return app.schoolEnrichment.pendingManifestPromise;
+}
+
+async function ensureSchoolEnrichmentShardLoaded(shardId) {
+  const resolvedShardId = Number(shardId);
+
+  if (!Number.isFinite(resolvedShardId) || resolvedShardId < 1) {
+    return null;
+  }
+
+  if (app.schoolEnrichment.loadedShardIds.has(resolvedShardId)) {
+    return resolvedShardId;
+  }
+
+  if (!app.schoolEnrichment.pendingShardById.has(resolvedShardId)) {
+    const request = (async () => {
+      const shardUrl = buildSchoolEnrichmentShardUrl(resolvedShardId);
+
+      if (!shardUrl) {
+        return null;
+      }
+
+      try {
+        let data;
+
+        try {
+          data = await loadJsonWithFetch(shardUrl);
+        } catch (fetchError) {
+          data = await loadJsonWithXhr(shardUrl);
+        }
+
+        if (data && typeof data === "object") {
+          Object.assign(app.schoolEnrichment.byInep, data);
+          app.schoolEnrichment.loadedShardIds.add(resolvedShardId);
+          return resolvedShardId;
+        }
+      } catch (error) {
+        // Se o shard ainda não existir, seguimos com os outros fallbacks.
+      }
+
+      return null;
+    })().finally(() => {
+      app.schoolEnrichment.pendingShardById.delete(resolvedShardId);
+    });
+
+    app.schoolEnrichment.pendingShardById.set(resolvedShardId, request);
+  }
+
+  return app.schoolEnrichment.pendingShardById.get(resolvedShardId);
+}
+
+async function ensureLegacySchoolEnrichmentLoaded() {
+  if (app.schoolEnrichment.legacyLoaded) {
+    return app.schoolEnrichment.byInep;
+  }
+
+  if (!app.schoolEnrichment.pendingLegacyPromise) {
+    app.schoolEnrichment.pendingLegacyPromise = (async () => {
+      try {
+        let data;
+
+        try {
+          data = await loadJsonWithFetch(SCHOOL_ENRICHMENT_LEGACY_CACHE_URL);
+        } catch (fetchError) {
+          data = await loadJsonWithXhr(SCHOOL_ENRICHMENT_LEGACY_CACHE_URL);
+        }
+
+        if (data && typeof data === "object") {
+          Object.assign(app.schoolEnrichment.byInep, data);
+        }
+      } catch (error) {
+        // O cache legado continua apenas como fallback para registros antigos.
+      } finally {
+        app.schoolEnrichment.legacyLoaded = true;
       }
 
       return app.schoolEnrichment.byInep;
     })().finally(() => {
-      app.schoolEnrichment.pendingPromise = null;
+      app.schoolEnrichment.pendingLegacyPromise = null;
     });
   }
 
-  return app.schoolEnrichment.pendingPromise;
+  return app.schoolEnrichment.pendingLegacyPromise;
+}
+
+async function ensureSchoolEnrichmentByInep(inepCode) {
+  const resolvedInepCode = text(inepCode);
+
+  if (!resolvedInepCode) {
+    return null;
+  }
+
+  if (Object.prototype.hasOwnProperty.call(app.schoolEnrichment.byInep, resolvedInepCode)) {
+    return app.schoolEnrichment.byInep[resolvedInepCode];
+  }
+
+  if (!app.schoolEnrichment.pendingByInep.has(resolvedInepCode)) {
+    const request = (async () => {
+      const manifest = await ensureSchoolEnrichmentManifestLoaded();
+      const shardId = Number(manifest?.entries?.[resolvedInepCode]);
+
+      if (Number.isFinite(shardId) && shardId > 0) {
+        await ensureSchoolEnrichmentShardLoaded(shardId);
+
+        if (Object.prototype.hasOwnProperty.call(app.schoolEnrichment.byInep, resolvedInepCode)) {
+          delete app.schoolEnrichment.statusByInep[resolvedInepCode];
+          return app.schoolEnrichment.byInep[resolvedInepCode];
+        }
+      }
+
+      try {
+        let data;
+        const cacheUrl = buildSchoolEnrichmentCacheUrl(resolvedInepCode);
+
+        try {
+          data = await loadJsonWithFetch(cacheUrl);
+        } catch (fetchError) {
+          data = await loadJsonWithXhr(cacheUrl);
+        }
+
+        if (data && typeof data === "object") {
+          app.schoolEnrichment.byInep[resolvedInepCode] = data;
+          delete app.schoolEnrichment.statusByInep[resolvedInepCode];
+          return data;
+        }
+      } catch (error) {
+        // Se o arquivo individual ainda não existir, tentamos o cache legado.
+      }
+
+      await ensureLegacySchoolEnrichmentLoaded();
+
+      if (Object.prototype.hasOwnProperty.call(app.schoolEnrichment.byInep, resolvedInepCode)) {
+        delete app.schoolEnrichment.statusByInep[resolvedInepCode];
+        return app.schoolEnrichment.byInep[resolvedInepCode];
+      }
+
+      return null;
+    })().finally(() => {
+      app.schoolEnrichment.pendingByInep.delete(resolvedInepCode);
+    });
+
+    app.schoolEnrichment.pendingByInep.set(resolvedInepCode, request);
+  }
+
+  return app.schoolEnrichment.pendingByInep.get(resolvedInepCode);
+}
+
+async function ensureSchoolEnrichmentStatusByInep(inepCode, { force = false } = {}) {
+  const resolvedInepCode = text(inepCode);
+
+  if (!resolvedInepCode) {
+    return null;
+  }
+
+  if (!force && Object.prototype.hasOwnProperty.call(app.schoolEnrichment.statusByInep, resolvedInepCode)) {
+    return app.schoolEnrichment.statusByInep[resolvedInepCode];
+  }
+
+  if (!force && app.schoolEnrichment.pendingStatusByInep.has(resolvedInepCode)) {
+    return app.schoolEnrichment.pendingStatusByInep.get(resolvedInepCode);
+  }
+
+  const request = (async () => {
+    const statusUrl = buildSchoolEnrichmentStatusUrl(resolvedInepCode);
+
+    try {
+      let data;
+
+      try {
+        data = await loadJsonWithFetch(statusUrl);
+      } catch (fetchError) {
+        data = await loadJsonWithXhr(statusUrl);
+      }
+
+      if (data && typeof data === "object") {
+        app.schoolEnrichment.statusByInep[resolvedInepCode] = data;
+        return data;
+      }
+    } catch (error) {
+      // Se o status ainda não existir, mantemos o fallback de indisponibilidade genérica.
+    }
+
+    if (force) {
+      delete app.schoolEnrichment.statusByInep[resolvedInepCode];
+    }
+
+    return app.schoolEnrichment.statusByInep[resolvedInepCode] ?? null;
+  })().finally(() => {
+    app.schoolEnrichment.pendingStatusByInep.delete(resolvedInepCode);
+  });
+
+  app.schoolEnrichment.pendingStatusByInep.set(resolvedInepCode, request);
+  return request;
 }
 
 function getSchoolEnrichment(row) {
   const inepCode = text(get(row, "inep"));
   return inepCode ? app.schoolEnrichment.byInep[inepCode] ?? null : null;
+}
+
+function getSchoolEnrichmentStatus(row) {
+  const inepCode = text(get(row, "inep"));
+  return inepCode ? app.schoolEnrichment.statusByInep[inepCode] ?? null : null;
+}
+
+function getSchoolEnrichmentAvailability(row) {
+  const entry = getSchoolEnrichment(row);
+
+  if (entry) {
+    return {
+      state: "available",
+      entry,
+      status: null
+    };
+  }
+
+  const status = getSchoolEnrichmentStatus(row);
+  const resolvedState = text(status?.status);
+
+  if (resolvedState === "not_found" || resolvedState === "error") {
+    return {
+      state: resolvedState,
+      entry: null,
+      status
+    };
+  }
+
+  return {
+    state: "pending",
+    entry: null,
+    status: null
+  };
+}
+
+function formatSchoolEnrichmentCheckedAt(value) {
+  const dateValue = value ? new Date(value) : null;
+
+  if (!dateValue || Number.isNaN(dateValue.getTime())) {
+    return "";
+  }
+
+  return dateValue.toLocaleString("pt-BR", {
+    dateStyle: "short",
+    timeStyle: "short"
+  });
 }
 
 function formatCount(value, fallback = "Não disponível") {
@@ -569,7 +911,7 @@ function getSchoolEnrollmentRows(entry) {
       label: text(row?.label),
       value: text(row?.value)
     }))
-    .filter(row => row.label && row.value && row.value !== row.label && /matr[ií]culas?/i.test(row.value))
+    .filter(row => row.label && row.value && row.value !== row.label && normalizeText(row.value).includes("matricula"))
     .filter(row => {
       const dedupeKey = `${row.label}::${row.value}`;
 
@@ -734,8 +1076,26 @@ function renderSchoolEnrichmentLoading() {
   `;
 }
 
+function renderSchoolEnrichmentUnavailableActions(row, { showSourceLink = true } = {}) {
+  const cultureEducaUrl = showSourceLink ? buildCultureEducaSchoolUrl(row) : "";
+  const rowId = getRowId(row);
+
+  return `
+    <div class="school-enrichment__actions">
+      <button class="school-enrichment__retry" type="button" data-retry-school-enrichment="${rowId}">
+        Recarregar esta escola
+      </button>
+      ${cultureEducaUrl
+        ? `<a class="school-enrichment__link" href="${cultureEducaUrl}" target="_blank" rel="noopener noreferrer">Abrir ficha pública da escola</a>`
+        : ""}
+    </div>
+    <p class="school-enrichment__source">
+      Este painel não atualiza sozinho. Em um projeto estático, o navegador não consegue consultar o Cultura Educa diretamente no clique da ficha.
+    </p>
+  `;
+}
+
 function renderSchoolEnrichmentUnavailable(row) {
-  const cultureEducaUrl = buildCultureEducaSchoolUrl(row);
 
   return `
     <div class="school-enrichment__status">
@@ -750,7 +1110,7 @@ function renderSchoolEnrichmentUnavailable(row) {
       Fonte prevista: ${escapeHtml(SCHOOL_ENRICHMENT_SOURCE_LABEL)}.
     </p>
     <p class="school-enrichment__source">
-      Dica: o projeto já está preparado para usar o arquivo local <code>${escapeHtml(SCHOOL_ENRICHMENT_CACHE_URL)}</code> quando ele for sincronizado.
+      Dica: o projeto já está preparado para usar o cache local por escola em <code>${escapeHtml(SCHOOL_ENRICHMENT_CACHE_DIR)}/</code> quando a sincronização for concluída.
     </p>
   `;
 }
@@ -780,6 +1140,126 @@ function renderSchoolEnrollmentUnavailable(row) {
   `;
 }
 
+function renderSchoolEnrollmentNotReported(row, entry) {
+  const sourceLabel = text(entry?.source?.label) || SCHOOL_ENRICHMENT_SOURCE_LABEL;
+  const sourceUrl = text(entry?.source?.url) || buildCultureEducaSchoolUrl(row);
+
+  return `
+    <div class="school-sheet__literacy-status">
+      A ficha pública sincronizada não trouxe matrículas por etapa para esta escola.
+    </div>
+    <p class="school-sheet__literacy-source">
+      Fonte: ${escapeHtml(sourceLabel)}
+      ${sourceUrl
+        ? ` • <a href="${sourceUrl}" target="_blank" rel="noopener noreferrer">ver ficha original</a>`
+        : ""}
+    </p>
+  `;
+}
+
+function renderSchoolEnrichmentUnavailable(row) {
+  const availability = getSchoolEnrichmentAvailability(row);
+  const checkedAtLabel = formatSchoolEnrichmentCheckedAt(availability.status?.checkedAt);
+  const errorMessage = text(availability.status?.message);
+
+  if (availability.state === "not_found") {
+    return `
+      <div class="school-enrichment__status">
+        Dados complementares não encontrados para esta escola na fonte Cultura Educa.
+      </div>
+      ${renderSchoolEnrichmentUnavailableActions(row, { showSourceLink: false })}
+      <p class="school-enrichment__source">
+        Fonte consultada: ${escapeHtml(SCHOOL_ENRICHMENT_SOURCE_LABEL)}.
+      </p>
+      <p class="school-enrichment__source">
+        ${checkedAtLabel
+          ? `Última verificação local: ${escapeHtml(checkedAtLabel)}.`
+          : "A sincronização local marcou esta escola como não encontrada na ficha pública."}
+      </p>
+    `;
+  }
+
+  if (availability.state === "error") {
+    return `
+      <div class="school-enrichment__status">
+        Não foi possível verificar os dados complementares desta escola na última sincronização local.
+      </div>
+      ${renderSchoolEnrichmentUnavailableActions(row)}
+      <p class="school-enrichment__source">
+        Fonte prevista: ${escapeHtml(SCHOOL_ENRICHMENT_SOURCE_LABEL)}.
+      </p>
+      <p class="school-enrichment__source">
+        ${errorMessage
+          ? `Último retorno registrado: ${escapeHtml(errorMessage)}.`
+          : "Use o botão de recarregar para tentar novamente quando a base local for atualizada."}
+      </p>
+    `;
+  }
+
+  return `
+    <div class="school-enrichment__status">
+      Dados complementares ainda não disponíveis no cache local desta escola.
+    </div>
+    ${renderSchoolEnrichmentUnavailableActions(row)}
+    <p class="school-enrichment__source">
+      Fonte prevista: ${escapeHtml(SCHOOL_ENRICHMENT_SOURCE_LABEL)}.
+    </p>
+    <p class="school-enrichment__source">
+      Dica: quando existir um arquivo em <code>${escapeHtml(SCHOOL_ENRICHMENT_CACHE_DIR)}/</code> para este INEP, use o botão de recarregar para tentar novamente.
+    </p>
+  `;
+}
+
+function renderSchoolEnrollmentUnavailable(row) {
+  const availability = getSchoolEnrichmentAvailability(row);
+  const checkedAtLabel = formatSchoolEnrichmentCheckedAt(availability.status?.checkedAt);
+  const errorMessage = text(availability.status?.message);
+
+  if (availability.state === "not_found") {
+    return `
+      <div class="school-sheet__literacy-status">
+        Matrículas por etapa não encontradas para esta escola na fonte Cultura Educa.
+      </div>
+      ${renderSchoolEnrichmentUnavailableActions(row, { showSourceLink: false })}
+      <p class="school-sheet__literacy-source">
+        Fonte consultada: ${escapeHtml(SCHOOL_ENRICHMENT_SOURCE_LABEL)}.
+      </p>
+      <p class="school-sheet__literacy-source">
+        ${checkedAtLabel
+          ? `Última verificação local: ${escapeHtml(checkedAtLabel)}.`
+          : "A sincronização local marcou esta escola como não encontrada na ficha pública."}
+      </p>
+    `;
+  }
+
+  if (availability.state === "error") {
+    return `
+      <div class="school-sheet__literacy-status">
+        Não foi possível verificar as matrículas por etapa desta escola na última sincronização local.
+      </div>
+      ${renderSchoolEnrichmentUnavailableActions(row)}
+      <p class="school-sheet__literacy-source">
+        Fonte prevista: ${escapeHtml(SCHOOL_ENRICHMENT_SOURCE_LABEL)}.
+      </p>
+      <p class="school-sheet__literacy-source">
+        ${errorMessage
+          ? `Último retorno registrado: ${escapeHtml(errorMessage)}.`
+          : "Use o botão de recarregar para tentar novamente quando a base local for atualizada."}
+      </p>
+    `;
+  }
+
+  return `
+    <div class="school-sheet__literacy-status">
+      Matrículas por etapa ainda não disponíveis no cache local desta escola.
+    </div>
+    ${renderSchoolEnrichmentUnavailableActions(row)}
+    <p class="school-sheet__literacy-source">
+      Fonte prevista: ${escapeHtml(SCHOOL_ENRICHMENT_SOURCE_LABEL)}.
+    </p>
+  `;
+}
+
 function renderSchoolEnrollmentPanel(row) {
   const entry = getSchoolEnrichment(row);
 
@@ -792,7 +1272,7 @@ function renderSchoolEnrollmentPanel(row) {
   const sourceUrl = text(entry?.source?.url) || buildCultureEducaSchoolUrl(row);
 
   if (!metrics.length) {
-    return renderSchoolEnrollmentUnavailable(row);
+    return renderSchoolEnrollmentNotReported(row, entry);
   }
 
   return `
@@ -2417,7 +2897,7 @@ function renderDataSourcesSheet() {
           copy: "Os dados são sincronizados para um cache local que o projeto consome ao abrir a ficha da escola."
         }
       ],
-      source: "Cultura Educa • Censo Escolar da Educação Básica 2020 • cache local school-enrichment-cache.json"
+      source: "Cultura Educa • Censo Escolar da Educação Básica 2020 • cache local por escola em school-enrichment-cache/"
     },
     {
       title: "Mapa e localização",
@@ -2523,7 +3003,8 @@ function renderSchoolSheet(row) {
                     <iframe
                       title="Mapa da escola ${escapeHtml(schoolName)}"
                       src="${mapsEmbedUrl}"
-                      loading="lazy"
+                      loading="eager"
+                      allowfullscreen
                       referrerpolicy="no-referrer-when-downgrade"
                     ></iframe>
                   </div>
@@ -2626,7 +3107,12 @@ async function updateOpenSchoolModalEnrichment(rowId) {
   }
 
   try {
-    await ensureSchoolEnrichmentLoaded();
+    const inepCode = get(row, "inep");
+    const entry = await ensureSchoolEnrichmentByInep(inepCode);
+
+    if (!entry) {
+      await ensureSchoolEnrichmentStatusByInep(inepCode, { force: true });
+    }
 
     if (app.activeSchoolId !== rowId) {
       return;
@@ -2660,6 +3146,26 @@ async function updateOpenSchoolModalEnrichment(rowId) {
 
     if (refreshedContainer) {
       refreshedContainer.innerHTML = renderSchoolEnrichmentUnavailable(row);
+    }
+  }
+
+  // Se ainda não houver dados, tentamos novamente por alguns segundos enquanto o modal estiver aberto.
+  const availability = getSchoolEnrichmentAvailability(row);
+
+  if (availability.state === "pending") {
+    const maxRetries = 20;
+    const retryDelayMs = 1000;
+
+    if (app.schoolEnrichment.retryCount < maxRetries && app.activeSchoolId === rowId) {
+      app.schoolEnrichment.retryCount += 1;
+
+      if (app.schoolEnrichment.retryTimerId) {
+        window.clearTimeout(app.schoolEnrichment.retryTimerId);
+      }
+
+      app.schoolEnrichment.retryTimerId = window.setTimeout(() => {
+        void updateOpenSchoolModalEnrichment(rowId);
+      }, retryDelayMs);
     }
   }
 }
@@ -2784,6 +3290,11 @@ function openSchoolModalById(rowId) {
   }
 
   app.activeSchoolId = rowId;
+  app.schoolEnrichment.retryCount = 0;
+  if (app.schoolEnrichment.retryTimerId) {
+    window.clearTimeout(app.schoolEnrichment.retryTimerId);
+    app.schoolEnrichment.retryTimerId = 0;
+  }
   els.schoolModalContent.innerHTML = renderSchoolSheet(row);
   els.schoolModal.classList.add("is-visible");
   els.schoolModal.setAttribute("aria-hidden", "false");
@@ -2804,6 +3315,11 @@ function closeSchoolModal() {
   els.schoolModalContent.innerHTML = "";
   syncModalBodyState();
   app.activeSchoolId = null;
+  app.schoolEnrichment.retryCount = 0;
+  if (app.schoolEnrichment.retryTimerId) {
+    window.clearTimeout(app.schoolEnrichment.retryTimerId);
+    app.schoolEnrichment.retryTimerId = 0;
+  }
 
   if (app.lastFocusedElement && typeof app.lastFocusedElement.focus === "function") {
     app.lastFocusedElement.focus();
@@ -2852,6 +3368,19 @@ function handleTableInteractions(event) {
 }
 
 function handleSchoolModalClick(event) {
+  const retryButton = event.target.closest("[data-retry-school-enrichment]");
+
+  if (retryButton) {
+    event.preventDefault();
+    const rowId = Number(retryButton.dataset.retrySchoolEnrichment);
+
+    if (Number.isInteger(rowId) && rowId >= 0) {
+      void updateOpenSchoolModalEnrichment(rowId);
+    }
+
+    return;
+  }
+
   if (!event.target.closest("[data-close-school-modal]")) {
     return;
   }
@@ -3005,6 +3534,9 @@ function renderStats() {
 function renderPagination() {
   if (!app.filteredRows.length) {
     els.paginationWrap.innerHTML = "";
+    if (els.paginationWrapBottom) {
+      els.paginationWrapBottom.innerHTML = "";
+    }
     return;
   }
 
@@ -3012,14 +3544,22 @@ function renderPagination() {
 
   if (pageCount === 1) {
     els.paginationWrap.innerHTML = `<span class="page-chip">Página 1 de 1</span>`;
+    if (els.paginationWrapBottom) {
+      els.paginationWrapBottom.innerHTML = `<span class="page-chip">Página 1 de 1</span>`;
+    }
     return;
   }
 
-  els.paginationWrap.innerHTML = `
+  const paginationHtml = `
     <button class="secondary" type="button" data-page="${app.currentPage - 1}" ${app.currentPage === 1 ? "disabled" : ""}>Anterior</button>
     <span class="page-chip">Página ${app.currentPage} de ${pageCount}</span>
     <button class="secondary" type="button" data-page="${app.currentPage + 1}" ${app.currentPage === pageCount ? "disabled" : ""}>Próxima</button>
   `;
+
+  els.paginationWrap.innerHTML = paginationHtml;
+  if (els.paginationWrapBottom) {
+    els.paginationWrapBottom.innerHTML = paginationHtml;
+  }
 }
 
 function renderTable() {
@@ -3092,6 +3632,31 @@ function matchesSelectFilters(row, selectedFilters) {
   });
 }
 
+function updateHomePanelsDeferred(options = {}) {
+  const delay = Number.isFinite(options.delay) ? Math.max(0, options.delay) : 0;
+
+  if (deferredHomePanelsTimeoutId) {
+    window.clearTimeout(deferredHomePanelsTimeoutId);
+    deferredHomePanelsTimeoutId = 0;
+  }
+
+  const scheduleUpdate = () => {
+    deferredHomePanelsTimeoutId = window.setTimeout(() => {
+      deferredHomePanelsTimeoutId = 0;
+      void updateLiteracyPanel();
+      void updateIncomePanel();
+      void updateEducationDashboard();
+    }, delay);
+  };
+
+  if (typeof window.requestAnimationFrame === "function") {
+    window.requestAnimationFrame(scheduleUpdate);
+    return;
+  }
+
+  scheduleUpdate();
+}
+
 function applyFilters(options = {}) {
   const searchTerm = normalize(els.searchInput.value);
   const selectedFilters = collectSelectedFilters();
@@ -3101,9 +3666,14 @@ function applyFilters(options = {}) {
   );
 
   refreshResults(options);
-  void updateLiteracyPanel();
-  void updateIncomePanel();
-  void updateEducationDashboard();
+
+  if (options.skipPanelUpdates) {
+    return;
+  }
+
+  updateHomePanelsDeferred({
+    delay: options.deferPanelUpdates ? 120 : 0
+  });
 }
 
 function clearFilters() {
@@ -3119,6 +3689,61 @@ function clearFilters() {
   applyFilters({ resetPage: true });
 }
 
+function countReplacementCharacters(value) {
+  return (String(value ?? "").match(/\uFFFD/g) ?? []).length;
+}
+
+function parseJsonWithFallback(buffer) {
+  if (!UTF8_TEXT_DECODER || !buffer) {
+    return JSON.parse(String(buffer ?? ""));
+  }
+
+  const utf8Text = UTF8_TEXT_DECODER.decode(new Uint8Array(buffer));
+  const utf8ReplacementCount = countReplacementCharacters(utf8Text);
+  let utf8Parsed = null;
+
+  try {
+    utf8Parsed = JSON.parse(utf8Text);
+  } catch (error) {
+    utf8Parsed = null;
+  }
+
+  if (!utf8ReplacementCount && utf8Parsed) {
+    return utf8Parsed;
+  }
+
+  if (!LATIN1_TEXT_DECODER) {
+    if (utf8Parsed) {
+      return utf8Parsed;
+    }
+    throw new Error("Não foi possível decodificar JSON.");
+  }
+
+  const latin1Text = LATIN1_TEXT_DECODER.decode(new Uint8Array(buffer));
+  const latin1ReplacementCount = countReplacementCharacters(latin1Text);
+  let latin1Parsed = null;
+
+  try {
+    latin1Parsed = JSON.parse(latin1Text);
+  } catch (error) {
+    latin1Parsed = null;
+  }
+
+  if (latin1Parsed && (latin1ReplacementCount < utf8ReplacementCount || !utf8Parsed)) {
+    return latin1Parsed;
+  }
+
+  if (utf8Parsed) {
+    return utf8Parsed;
+  }
+
+  if (latin1Parsed) {
+    return latin1Parsed;
+  }
+
+  throw new Error("Não foi possível decodificar JSON.");
+}
+
 async function loadJsonWithFetch(url) {
   const response = await fetch(url);
 
@@ -3126,13 +3751,15 @@ async function loadJsonWithFetch(url) {
     throw new Error(`Falha HTTP ao carregar a base local: ${response.status}`);
   }
 
-  return response.json();
+  const buffer = await response.arrayBuffer();
+  return parseJsonWithFallback(buffer);
 }
 
 function loadJsonWithXhr(url) {
   return new Promise((resolve, reject) => {
     const request = new XMLHttpRequest();
     request.open("GET", url, true);
+    request.responseType = "arraybuffer";
 
     request.onload = function onLoad() {
       const isHttpSuccess = request.status >= 200 && request.status < 300;
@@ -3144,7 +3771,7 @@ function loadJsonWithXhr(url) {
       }
 
       try {
-        resolve(JSON.parse(request.responseText));
+        resolve(parseJsonWithFallback(request.response));
       } catch (error) {
         reject(error);
       }
@@ -3179,7 +3806,6 @@ async function loadLocalData() {
     app.rawRows = rows;
     buildFilters();
     applyFilters({ resetPage: true });
-    void ensureSchoolEnrichmentLoaded();
   } catch (error) {
     const fileHint = location.protocol === "file:"
       ? " Se você abriu o arquivo diretamente, tente servir a pasta com um servidor local simples."
@@ -3189,7 +3815,10 @@ async function loadLocalData() {
     console.error(error);
     els.resultSummary.textContent = "Falha ao carregar a base local.";
     setTableMessage(message);
-    els.paginationWrap.innerHTML = "";
+  els.paginationWrap.innerHTML = "";
+  if (els.paginationWrapBottom) {
+    els.paginationWrapBottom.innerHTML = "";
+  }
   }
 }
 
@@ -3253,7 +3882,10 @@ function bindEvents() {
     app.pageSize = Number(els.pageSizeFilter.value) || DEFAULT_PAGE_SIZE;
     applyFilters({ resetPage: true });
   });
-  els.paginationWrap.addEventListener("click", handlePageNavigation);
+els.paginationWrap.addEventListener("click", handlePageNavigation);
+if (els.paginationWrapBottom) {
+  els.paginationWrapBottom.addEventListener("click", handlePageNavigation);
+}
 
   els.regionFilter.addEventListener("change", handleRegionFilterChange);
   els.ufFilter.addEventListener("change", handleUfFilterChange);

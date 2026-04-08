@@ -1,11 +1,3 @@
-{
-   "extensiondescription": {
-      "message": "Datoteke Drive odprite neposredno v brskalniku v združljivih aplikacijah, nameščenih v računalniku."
-   },
-   "extensionname": {
-      "message": "Application Launcher For Drive (ustvaril Google)"
-   },
-   "extensionshortname": {
-      "message": "Google Drive App Launcher"
-   }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:344f7070a4fa99a7bc68a77d1461f6b23fb8128f408ad786c97527df27a2fb04
+size 335

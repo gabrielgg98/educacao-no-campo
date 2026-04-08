@@ -1,11 +1,3 @@
-{
-   "extensiondescription": {
-      "message": "Atveriet Diska failus tieši no pārlūkprogrammas datorā instalētās saderīgās lietojumprogrammās."
-   },
-   "extensionname": {
-      "message": "Lietojumprogrammas Disks palaidējs (nodrošina Google)"
-   },
-   "extensionshortname": {
-      "message": "Google diska lietotnes palaidējs"
-   }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:6ca9551f5c726a162e5583a67e7735ffc7c390da440dff5098fce6c77e621a03
+size 351

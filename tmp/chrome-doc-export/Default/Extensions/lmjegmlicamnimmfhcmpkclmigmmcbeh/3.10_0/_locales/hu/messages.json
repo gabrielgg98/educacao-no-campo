@@ -1,11 +1,3 @@
-{
-   "extensiondescription": {
-      "message": "Közvetlenül a böngészőből nyithatja meg a Drive-fájlokat a kompatibilis alkalmazásokban a számítógépén."
-   },
-   "extensionname": {
-      "message": "Alkalmazásindító a Drive-hoz (a Google-tól)"
-   },
-   "extensionshortname": {
-      "message": "Google Drive-alkalmazásindító"
-   }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:7e88f2ff297c1642dc9d0953dc3401999d54541b13f53035c533d1c919a59680
+size 354

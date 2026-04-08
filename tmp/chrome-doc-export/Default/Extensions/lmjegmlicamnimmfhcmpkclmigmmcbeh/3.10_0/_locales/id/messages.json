@@ -1,11 +1,3 @@
-{
-   "extensiondescription": {
-      "message": "Buka file Drive langsung dari browser di aplikasi kompatibel yang terinstal di komputer Anda."
-   },
-   "extensionname": {
-      "message": "Peluncur Aplikasi Untuk Drive (dari Google)"
-   },
-   "extensionshortname": {
-      "message": "Peluncur Aplikasi Google Drive"
-   }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:21c1caf9c9da3c62c5c24d6216d5cd91e83e347dbd47875e351b59c6204cb79a
+size 325

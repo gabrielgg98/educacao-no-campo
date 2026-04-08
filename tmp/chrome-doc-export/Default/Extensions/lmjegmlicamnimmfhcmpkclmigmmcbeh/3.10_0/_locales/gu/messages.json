@@ -1,11 +1,3 @@
-{
-   "extensiondescription": {
-      "message": "તમારા કમ્પ્યુટર પર ઇન્સ્ટૉલ કરવામાં આવેલી સુસંગત ઍપ્લિકેશનોમાં સીધા તમારા બ્રાઉઝરમાંથી જ Driveમાંની ફાઇલો ખોલો."
-   },
-   "extensionname": {
-      "message": "Drive માટે ઍપ્લિકેશન લૉન્ચર (Google દ્વારા)"
-   },
-   "extensionshortname": {
-      "message": "Google Drive ઍપ લૉન્ચર"
-   }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:ab929dccfa50702ef291ffe5edd9cf29d85a2b5222a37be099b40b95fae589d9
+size 583

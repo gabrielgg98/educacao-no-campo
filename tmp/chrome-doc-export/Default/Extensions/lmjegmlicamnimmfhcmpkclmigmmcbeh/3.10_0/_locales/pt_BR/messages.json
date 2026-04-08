@@ -1,11 +1,3 @@
-{
-   "extensiondescription": {
-      "message": "Abre os arquivos do Drive diretamente do navegador em apps compatíveis instalados no seu computador."
-   },
-   "extensionname": {
-      "message": "Acesso rápido a apps para o Drive (do Google)"
-   },
-   "extensionshortname": {
-      "message": "Acesso rápido a apps para o Google Drive"
-   }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:9b2418496c8b139b07a78a26df541fd3eded026f3c3829bb51f772fa4d8c1029
+size 347

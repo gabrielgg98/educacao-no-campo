@@ -1,11 +1,3 @@
-{
-   "extensiondescription": {
-      "message": "Направо от браузъра си отваряйте файлове в Диск със съвместими приложения на компютъра ви."
-   },
-   "extensionname": {
-      "message": "Стартиране на приложения за Диск (от Google)"
-   },
-   "extensionshortname": {
-      "message": "Стартиране за Google Диск"
-   }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:be0d2dff737485705611b5a8a7c83fe7ebc6050e1106568e2a183449602c145a
+size 440

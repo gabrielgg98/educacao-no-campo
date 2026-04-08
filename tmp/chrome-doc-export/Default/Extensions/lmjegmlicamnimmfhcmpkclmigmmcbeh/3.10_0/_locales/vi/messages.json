@@ -1,11 +1,3 @@
-{
-   "extensiondescription": {
-      "message": "Mở các tệp Drive ngay trên trình duyệt của bạn trong các ứng dụng tương thích được cài đặt trên máy tính."
-   },
-   "extensionname": {
-      "message": "Trình chạy ứng dụng dành cho Drive (của Google)"
-   },
-   "extensionshortname": {
-      "message": "Trình chạy ứng dụng dành cho Google Drive"
-   }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:a08c33fe5438e8274dba129cab5f7f93dabbf5bd2ebd3734e8707d1f873397df
+size 402

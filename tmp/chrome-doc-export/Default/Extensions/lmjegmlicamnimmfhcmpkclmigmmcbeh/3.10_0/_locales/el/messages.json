@@ -1,11 +1,3 @@
-{
-   "extensiondescription": {
-      "message": "Ανοίξτε αρχεία Drive απευθείας από το πρόγραμμα περιήγησης σε συμβατές εφαρμογές που είναι εγκατεστημένες στον υπολογιστή."
-   },
-   "extensionname": {
-      "message": "Εφαρμογή εκκίνησης εφαρμογών για το Drive (από την Google)"
-   },
-   "extensionshortname": {
-      "message": "Εφαρμογή εκκίνησης εφαρμογών Google Drive"
-   }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:7c0e52770ebfed49696858092c551f5ba7790f2d91331ff0ab31a651f66788d5
+size 544

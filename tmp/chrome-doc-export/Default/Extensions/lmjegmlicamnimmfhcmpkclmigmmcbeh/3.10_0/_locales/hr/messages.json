@@ -1,11 +1,3 @@
-{
-   "extensiondescription": {
-      "message": "Otvarajte datoteke Diska izravno s preglednika u kompatibilnim aplikacijama instaliranim na vaše računalo."
-   },
-   "extensionname": {
-      "message": "Pokretač aplikacije za Disk (Googleov)"
-   },
-   "extensionshortname": {
-      "message": "Pokretač aplikacija Google diska"
-   }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:c964886b9242791d34cf43c64cc7e33c85e4cbe6b00dcb1fa721b61439067f11
+size 339

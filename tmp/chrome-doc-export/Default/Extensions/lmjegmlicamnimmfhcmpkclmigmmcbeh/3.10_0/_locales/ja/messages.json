@@ -1,11 +1,3 @@
-{
-   "extensiondescription": {
-      "message": "パソコンにインストールされている互換性のあるアプリケーションを使用して、ブラウザから直接ドライブ ファイルを開くことができます。"
-   },
-   "extensionname": {
-      "message": "ドライブ用アプリケーション ランチャー（Google）"
-   },
-   "extensionshortname": {
-      "message": "Google ドライブ用アプリ ランチャー"
-   }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:16a5d40d746f6b1a11f73c7f51cff9f83a385461928b417759969654c4846e1e
+size 463

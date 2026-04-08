@@ -1,11 +1,3 @@
-{
-   "extensiondescription": {
-      "message": "Kompüterə quraşdırılmış uyğun tətbiqlərin brauzerində Disk fayllarını birbaşa açın."
-   },
-   "extensionname": {
-      "message": "Disk üçün Tətbiq Başladıcısı (Google tərəfindən dəstəklənir)"
-   },
-   "extensionshortname": {
-      "message": "Google Disk üçün Tətbiq Başladıcısı"
-   }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:6a5a6227d17dc51ddcafa384ecd0c8121fdbcd871b6d105ffa5f90447a066157
+size 375
